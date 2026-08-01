@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_s">8dp</dimen>
+    <dimen name="space_m">12dp</dimen>
+    <dimen name="space_l">16dp</dimen>
+    <dimen name="space_xl">24dp</dimen>
+
+    <!-- Минимальный тач-таргет по нормативу платформы. Меньше не делать нигде. -->
+    <dimen name="touch_target">48dp</dimen>
+    <dimen name="corner">12dp</dimen>
+
+    <!--
+        Полоса инструментов в альбоме. Шире тач-таргета на восемь точек: значок в ней
+        стоит по центру, а ширины в альбоме девать некуда — её отнимают у пустого поля,
+        а не у доски.
+    -->
+    <dimen name="tools_strip">56dp</dimen>
+
+    <!-- Доска -->
+    <dimen name="board_frame">2dp</dimen>
+    <dimen name="board_line">1dp</dimen>
+    <!-- Обводка выбранной клетки. Выбор виден кольцом, а не только заливкой: так его
+         замечают и те, кто плохо различает оттенки. -->
+    <dimen name="board_ring">3dp</dimen>
+
+    <dimen name="text_display">28sp</dimen>
+    <dimen name="text_title">20sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+    <dimen name="text_caption">13sp</dimen>
+
+</resources>

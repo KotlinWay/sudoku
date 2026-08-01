@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sudoku</string>
+
+    <string name="level_easy">Easy</string>
+    <string name="level_medium">Medium</string>
+    <string name="level_hard">Hard</string>
+    <string name="level_expert">Expert</string>
+    <string name="level_daily">Daily puzzle</string>
+
+    <string name="time">%1$02d:%2$02d</string>
+    <string name="time_desc">Time played: %1$s</string>
+    <string name="lives_desc">Lives left: %1$d of %2$d</string>
+    <string name="hints_desc">Hints left: %1$d</string>
+
+    <string name="generating">Making a puzzle…</string>
+
+    <string name="board_desc">Sudoku board</string>
+    <string name="cell_empty">Row %1$d, column %2$d, empty</string>
+    <string name="cell_value">Row %1$d, column %2$d, %3$d</string>
+    <string name="cell_given">Row %1$d, column %2$d, %3$d, there from the start</string>
+    <string name="cell_notes">Row %1$d, column %2$d, notes: %3$s</string>
+    <string name="cell_wrong">Row %1$d, column %2$d, %3$d, wrong</string>
+    <!-- Разделитель пометок при чтении вслух: в другой письменности он может быть иным. -->
+    <string name="notes_separator">, </string>
+
+    <string name="key_desc">Digit %1$d</string>
+    <string name="erase">Erase</string>
+
+    <string name="tool_undo">Undo</string>
+    <string name="tool_redo">Redo</string>
+    <string name="tool_pencil">Notes</string>
+    <string name="tool_hint">Hint</string>
+    <string name="tool_pause">Pause</string>
+    <string name="tool_resume">Resume</string>
+    <string name="tool_more">More</string>
+
+    <string name="pencil_on_desc">Notes on: a digit becomes a pencil mark</string>
+    <string name="pencil_off_desc">Notes off: a digit becomes an answer</string>
+
+    <string name="no_hints">You are out of hints.</string>
+    <string name="board_full">There is nothing left to fill in.</string>
+
+    <string name="paused_title">Paused</string>
+    <string name="paused_text">The clock is stopped, the board will wait.</string>
+    <string name="resume">Resume</string>
+
+    <string name="won_title">Solved!</string>
+    <string name="won_time">Time: %1$s</string>
+    <plurals name="won_hints">
+        <item quantity="one">%1$d hint</item>
+        <item quantity="other">%1$d hints</item>
+    </plurals>
+    <!-- Время, подсказки и уровень одной строкой: порядок частей тоже перевод. -->
+    <string name="won_summary">%1$s · %2$s · %3$s</string>
+    <string name="won_record">That is your best time!</string>
+    <string name="won_best">Best time: %1$s</string>
+    <string name="won_no_best">I only count a best time for games played without hints.</string>
+    <string name="view_board">Look at the board</string>
+
+    <string name="lost_title">Game over</string>
+    <string name="lost_text">That is more mistakes than this level forgives.</string>
+    <string name="try_again">Try again</string>
+    <string name="new_game">New game</string>
+
+    <string name="stats">Stats</string>
+    <string name="stats_played">Games</string>
+    <string name="stats_wins">Wins</string>
+    <string name="stats_win_rate">Win rate</string>
+    <string name="stats_streak">Streak</string>
+    <string name="stats_percent">%1$d %%</string>
+    <string name="stats_best_title">Best time without hints</string>
+    <string name="stats_no_time">—</string>
+    <string name="stats_streak_best">Best streak: %1$d</string>
+    <string name="stats_reset">Reset stats</string>
+    <string name="stats_reset_title">Reset the stats?</string>
+    <string name="stats_reset_text">I will forget every game, streak and best time. The game you started stays untouched.</string>
+    <string name="close">Close</string>
+
+    <string name="settings">Settings</string>
+    <string name="candidates">Show possible digits</string>
+    <string name="candidates_hint">I will fill every empty cell with the digits that still fit there. You will not need the pencil, so it turns off.</string>
+    <string name="sound">Sound</string>
+    <string name="sound_hint">A short response to a move. Quieter than the system volume, and silent when the phone is on mute.</string>
+
+    <string name="raccoon_title">Raccoon Notes</string>
+    <string name="raccoon_text">My main notepad: notes that do not get lost.</string>
+    <string name="raccoon_button">Take a look</string>
+
+    <string name="links_section">More</string>
+    <string name="link_telegram">Telegram channel</string>
+    <string name="link_max">MAX channel</string>
+    <string name="link_play">My other apps on Google Play</string>
+    <string name="link_rustore">My other apps on RuStore</string>
+    <string name="link_site">My site javaway.info</string>
+    <string name="link_rate">Rate the app</string>
+    <string name="link_write">Write to me</string>
+    <string name="link_failed">I found nothing on this phone to open that link.</string>
+    <string name="version">%1$s %2$s</string>
+    <string name="mail_subject">%1$s %2$s</string>
+
+    <!-- New game screen -->
+    <string name="current_game">A game is running: %1$s, %2$s. A new one erases it, with no way back.</string>
+    <plurals name="clues">
+        <item quantity="one">%1$d digit open</item>
+        <item quantity="other">%1$d digits open</item>
+    </plurals>
+    <plurals name="lives">
+        <item quantity="one">%1$d life</item>
+        <item quantity="other">%1$d lives</item>
+    </plurals>
+    <!-- Открытые цифры и жизни одной строкой: разделитель тоже перевод. -->
+    <string name="level_note">%1$s · %2$s</string>
+    <string name="daily_note">Puzzle # %1$d · %2$s</string>
+    <string name="daily_note_solved">Puzzle # %1$d · already solved today</string>
+</resources>

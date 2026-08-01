@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Включённый карандаш — единственная заливка в наборе, и это не оплошность: на жёлтом баре
+    оттенком включённость не показать, а среди четырёх контурных значков один залитый читается
+    именно как «нажато», а не как пятно. Плашка при этом отступает от края и скруглена сильно,
+    а карандаш внутри — такой же контурный, как снаружи: масса чёрного вдвое меньше прежней.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/on_accent"
+        android:pathData="M9,2h6a7,7 0 0 1 7,7v6a7,7 0 0 1 -7,7h-6a7,7 0 0 1 -7,-7v-6a7,7 0 0 1 7,-7z" />
+    <path
+        android:pathData="M6.6,17.4L7,14.5L14.5,7L17,9.5L9.5,17Z"
+        android:strokeColor="@color/accent"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M7,14.5L9.5,17"
+        android:strokeColor="@color/accent"
+        android:strokeWidth="1.7"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

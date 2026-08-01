@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Светлая тема. Судоку смотрят подряд по двадцать минут, поэтому палитра собрана вокруг
+    трёх решений:
+
+    1. Ни одной большой заливки в полную яркость. Клетка не чисто белая (#FFFFFF), фон
+       страницы приглушённее клетки: белое поле в 81 клетку светит в глаза сильнее любого
+       текста на нём.
+    2. Подсветка — одного цвета, тремя ступенями. Выбранная клетка, клетки с той же цифрой
+       и соседи по строке, столбцу и квадрату различаются насыщенностью одного и того же
+       жёлтого и нейтральной подложки, а не тремя разными красками. Радуга на доске
+       заставляет глаз каждый раз заново решать, что из этого важнее.
+    3. Цвет ничего не сообщает в одиночку. Данность отличается от вписанной цифры не только
+       краской, но и начертанием; ошибка — не только красным, но и дрожанием клетки.
+
+    Жёлтый #FFD33E — акцент семейства приложений: он остаётся на баре и на выбранной клетке,
+    то есть на двух маленьких площадях, где он не утомляет и работает узнаванием.
+    Все пары «текст на фоне» проверены на контраст не ниже 4,5:1.
+-->
+<resources>
+    <color name="accent">#FFD33E</color>
+    <!-- Тёмная доля акцента для полосы статуса: светлые системные значки на ней читаются. -->
+    <color name="accent_dark">#8A6D00</color>
+    <color name="on_accent">#000000</color>
+    <color name="toolbar_line">#80000000</color>
+
+    <color name="background">#F1F1EC</color>
+    <color name="surface">#E7E7E1</color>
+    <color name="on_background">#14161A</color>
+    <color name="on_surface">#14161A</color>
+    <color name="muted">#5C6470</color>
+    <color name="divider">#D6D6CF</color>
+    <color name="error">#B22525</color>
+
+    <!-- Доска -->
+    <color name="cell">#FCFCFB</color>
+    <color name="cell_peer">#E8E9E4</color>
+    <color name="cell_same">#FFF1C4</color>
+    <color name="cell_selected">#FFE79A</color>
+    <color name="cell_wrong">#F8DCDC</color>
+    <color name="board_line">#C9CBC7</color>
+    <color name="board_frame">#4A4F58</color>
+
+    <!-- Цифры. Данность — почти чёрная и жирная, своя — синяя: перепутать нельзя даже боком. -->
+    <color name="digit_given">#14161A</color>
+    <color name="digit_player">#1A5FBF</color>
+    <color name="digit_note">#5C6470</color>
+    <color name="digit_wrong">#B22525</color>
+
+    <color name="heart">#B22525</color>
+    <color name="heart_lost">#C9C9C3</color>
+</resources>

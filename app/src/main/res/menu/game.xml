@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Инструменты живут в баре, а не рядом с доской: ряд кнопок под клавиатурой съедал
+    полсотни точек высоты, и на них доска не добирала до полной ширины экрана.
+
+    В баре значками — то, чем пользуются в каждой партии. Всё остальное под тремя точками:
+    редко нужное не должно занимать место, которое стоит доске.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_undo"
+        android:icon="@drawable/ic_undo"
+        android:showAsAction="always"
+        android:title="@string/tool_undo" />
+    <item
+        android:id="@+id/menu_pencil"
+        android:icon="@drawable/ic_pencil"
+        android:showAsAction="always"
+        android:title="@string/tool_pencil" />
+    <item
+        android:id="@+id/menu_hint"
+        android:icon="@drawable/ic_hint"
+        android:showAsAction="always"
+        android:title="@string/tool_hint" />
+    <item
+        android:id="@+id/menu_pause"
+        android:icon="@drawable/ic_pause"
+        android:showAsAction="always"
+        android:title="@string/tool_pause" />
+
+    <item
+        android:id="@+id/menu_redo"
+        android:showAsAction="never"
+        android:title="@string/tool_redo" />
+    <item
+        android:id="@+id/menu_new"
+        android:showAsAction="never"
+        android:title="@string/new_game" />
+    <item
+        android:id="@+id/menu_stats"
+        android:showAsAction="never"
+        android:title="@string/stats" />
+    <item
+        android:id="@+id/menu_settings"
+        android:showAsAction="never"
+        android:title="@string/settings" />
+</menu>

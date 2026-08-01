@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Тёмная тема. Те же три решения, что и в светлой, плюс четвёртое: фон не чёрный.
+    Чистый #000000 под белыми цифрами даёт максимальный возможный контраст, от которого
+    в темноте цифры «звенят» и остаётся след на сетчатке. Синевато-серый фон семейства
+    убирает этот эффект и не мешает читать.
+
+    Жёлтый акцент в тёмной теме не меняется: это знак семейства приложений.
+    Все пары «текст на фоне» проверены на контраст не ниже 4,5:1.
+-->
+<resources>
+    <color name="accent">#FFD33E</color>
+    <color name="accent_dark">#8A6D00</color>
+    <color name="on_accent">#000000</color>
+    <color name="toolbar_line">#80000000</color>
+
+    <color name="background">#111E30</color>
+    <color name="surface">#173257</color>
+    <color name="on_background">#E9EDF3</color>
+    <color name="on_surface">#FBFBFB</color>
+    <color name="muted">#A3B4CE</color>
+    <color name="divider">#24406B</color>
+    <color name="error">#FF7B7B</color>
+
+    <color name="cell">#16263F</color>
+    <color name="cell_peer">#1B3050</color>
+    <color name="cell_same">#33301A</color>
+    <color name="cell_selected">#453D1B</color>
+    <color name="cell_wrong">#452020</color>
+    <color name="board_line">#24406B</color>
+    <color name="board_frame">#6C8BBF</color>
+
+    <color name="digit_given">#F2F5FA</color>
+    <color name="digit_player">#7FB2FF</color>
+    <color name="digit_note">#A3B4CE</color>
+    <color name="digit_wrong">#FF7B7B</color>
+
+    <color name="heart">#FF6B6B</color>
+    <color name="heart_lost">#2C3E5C</color>
+</resources>

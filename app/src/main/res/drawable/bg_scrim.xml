@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Затемнение под панелью итогов: доска остаётся видна, но перестаёт спорить с текстом. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#B3000000" />
+</shape>

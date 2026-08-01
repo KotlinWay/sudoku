@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Судоку</string>
+
+    <!-- Полные названия: в статистике и на панели победы места хватает. -->
+    <string name="level_easy">Просто</string>
+    <string name="level_medium">Средне</string>
+    <string name="level_hard">Сложно</string>
+    <string name="level_expert">Эксперт</string>
+    <string name="level_daily">Задача дня</string>
+
+    <string name="time">%1$02d:%2$02d</string>
+    <string name="time_desc">Прошло времени: %1$s</string>
+    <string name="lives_desc">Жизней осталось: %1$d из %2$d</string>
+    <string name="hints_desc">Подсказок осталось: %1$d</string>
+
+    <string name="generating">Составляю задачу…</string>
+
+    <string name="board_desc">Доска судоку</string>
+    <string name="cell_empty">Строка %1$d, столбец %2$d, пусто</string>
+    <string name="cell_value">Строка %1$d, столбец %2$d, %3$d</string>
+    <string name="cell_given">Строка %1$d, столбец %2$d, %3$d, открыта с начала</string>
+    <string name="cell_notes">Строка %1$d, столбец %2$d, пометки: %3$s</string>
+    <string name="cell_wrong">Строка %1$d, столбец %2$d, %3$d, неверно</string>
+    <string name="notes_separator">, </string>
+
+    <string name="key_desc">Цифра %1$d</string>
+    <string name="erase">Стереть</string>
+
+    <string name="tool_undo">Отмена</string>
+    <string name="tool_redo">Вернуть</string>
+    <string name="tool_pencil">Пометки</string>
+    <string name="tool_hint">Совет</string>
+    <string name="tool_pause">Пауза</string>
+    <string name="tool_resume">Дальше</string>
+    <string name="tool_more">Ещё</string>
+
+    <string name="pencil_on_desc">Карандаш включён: цифра ляжет пометкой</string>
+    <string name="pencil_off_desc">Карандаш выключен: цифра ляжет ответом</string>
+
+    <string name="no_hints">Подсказки кончились.</string>
+    <string name="board_full">Заполнять больше нечего.</string>
+
+    <string name="paused_title">Пауза</string>
+    <string name="paused_text">Часы стоят, доска подождёт.</string>
+    <string name="resume">Продолжить</string>
+
+    <string name="won_title">Решено!</string>
+    <string name="won_time">Время: %1$s</string>
+    <plurals name="won_hints">
+        <item quantity="one">%1$d подсказка</item>
+        <item quantity="few">%1$d подсказки</item>
+        <item quantity="many">%1$d подсказок</item>
+        <item quantity="other">%1$d подсказки</item>
+    </plurals>
+    <string name="won_summary">%1$s · %2$s · %3$s</string>
+    <string name="won_record">Это ваше лучшее время!</string>
+    <string name="won_best">Лучшее время: %1$s</string>
+    <string name="won_no_best">Лучшее время я считаю только по партиям без подсказок.</string>
+    <string name="view_board">Посмотреть доску</string>
+
+    <string name="lost_title">Партия окончена</string>
+    <string name="lost_text">Ошибок больше, чем этот уровень прощает.</string>
+    <string name="try_again">Ещё раз</string>
+    <string name="new_game">Новая игра</string>
+
+    <string name="stats">Статистика</string>
+    <string name="stats_played">Партий</string>
+    <string name="stats_wins">Побед</string>
+    <string name="stats_win_rate">Доля побед</string>
+    <string name="stats_streak">Серия</string>
+    <string name="stats_percent">%1$d %%</string>
+    <string name="stats_best_title">Лучшее время без подсказок</string>
+    <string name="stats_no_time">—</string>
+    <string name="stats_streak_best">Лучшая серия: %1$d</string>
+    <string name="stats_reset">Сбросить статистику</string>
+    <string name="stats_reset_title">Сбросить статистику?</string>
+    <string name="stats_reset_text">Я забуду все партии, серии и лучшее время. Начатую игру это не тронет.</string>
+    <string name="close">Закрыть</string>
+
+    <string name="settings">Настройки</string>
+    <string name="candidates">Показывать возможные цифры</string>
+    <string name="candidates_hint">Я сам расставлю в пустых клетках то, что туда ещё влезает. Карандаш при этом не нужен и выключается.</string>
+    <string name="sound">Звук</string>
+    <string name="sound_hint">Короткий отклик на ход. Играет тише системной громкости и молчит, когда телефон в беззвучном режиме.</string>
+
+    <string name="raccoon_title">Блокнот Енот</string>
+    <string name="raccoon_text">Мой основной блокнот: заметки, которые не теряются.</string>
+    <string name="raccoon_button">Посмотреть</string>
+
+    <string name="links_section">Ещё</string>
+    <string name="link_telegram">Telegram-канал</string>
+    <string name="link_max">Канал в MAX</string>
+    <string name="link_play">Другие мои приложения в Google Play</string>
+    <string name="link_rustore">Другие мои приложения в RuStore</string>
+    <string name="link_site">Сайт javaway.info</string>
+    <string name="link_rate">Оценить приложение</string>
+    <string name="link_write">Написать мне</string>
+    <string name="link_failed">Не нашёл на этом телефоне ничего, чем открыть ссылку.</string>
+    <string name="version">%1$s %2$s</string>
+    <string name="mail_subject">%1$s %2$s</string>
+
+    <!-- Экран новой игры -->
+    <string name="current_game">Сейчас идёт партия: %1$s, %2$s. Новая её сотрёт — вернуть будет нечем.</string>
+    <plurals name="clues">
+        <item quantity="one">%1$d открытая цифра</item>
+        <item quantity="few">%1$d открытые цифры</item>
+        <item quantity="many">%1$d открытых цифр</item>
+        <item quantity="other">%1$d открытые цифры</item>
+    </plurals>
+    <plurals name="lives">
+        <item quantity="one">%1$d жизнь</item>
+        <item quantity="few">%1$d жизни</item>
+        <item quantity="many">%1$d жизней</item>
+        <item quantity="other">%1$d жизни</item>
+    </plurals>
+    <string name="level_note">%1$s · %2$s</string>
+    <string name="daily_note">Задача № %1$d · %2$s</string>
+    <string name="daily_note_solved">Задача № %1$d · сегодня уже решена</string>
+</resources>

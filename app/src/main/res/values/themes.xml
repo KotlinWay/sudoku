@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:colorPrimary">@color/accent</item>
+        <item name="android:colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/on_background</item>
+        <item name="android:textColorSecondary">@color/muted</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:statusBarColor">@color/accent_dark</item>
+        <!--
+            Линия под баром задана темой, а не разметками: система рисует windowContentOverlay
+            поверх содержимого ровно по нижнему краю бара, на каждом экране и без копий
+            в вёрстке.
+        -->
+        <item name="android:windowContentOverlay">@drawable/toolbar_line</item>
+    </style>
+
+    <!--
+        Нативный бар красится темой, а не библиотечным Toolbar: AndroidX в проекте нет.
+        Фон задан прямо, а не только через colorPrimary: тема DayNight в тёмном режиме
+        подставила бы баровые цвета сама. Заголовок чёрным — тоже явно: иначе он берётся
+        из textColorPrimary и ночью стал бы белым на жёлтом.
+    -->
+    <style name="ActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
+        <item name="android:background">@color/accent</item>
+        <item name="android:titleTextStyle">@style/ActionBarTitle</item>
+    </style>
+
+    <style name="ActionBarTitle" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/on_accent</item>
+    </style>
+
+    <!--
+        Точка в имени стиля — это наследование: AAPT2 ищет предка «Text» у «Text.Body»
+        и падает, если такого стиля нет. Поэтому семейства объявлены явно. Предками взяты
+        платформенные виджеты: кнопка сохраняет свои отступы, центрирование и отклик
+        на нажатие, а мы переопределяем только фон и цвета.
+    -->
+    <style name="Text" parent="@android:style/Widget.DeviceDefault.TextView" />
+
+    <!--
+        Плоские кнопки: у платформенной кнопки есть stateListAnimator, поднимающий её над
+        поверхностью, и оттого настоящая тень. Рисуется тень **за** границами View, а ряды
+        клавиш подогнаны под кнопки впритык — родитель её обрезал, и от тени оставалась
+        полоска в один пиксель снизу да размытие в зазорах между клавишами.
+
+        Тень убрана, а не дана ей место: во всём приложении ничего не отбрасывает теней —
+        ни плитки, ни доска, ни панели, — и клавиши были единственным исключением, к тому же
+        обрезанным. Нажатие видно и без подъёма: `bg_key` красит нажатую клавишу в акцент.
+    -->
+    <style name="Button" parent="@android:style/Widget.DeviceDefault.Button">
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <style name="Text.Display">
+        <item name="android:textSize">@dimen/text_display</item>
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <style name="Text.Title">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <style name="Text.Body">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/on_background</item>
+    </style>
+
+    <style name="Text.Caption">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/muted</item>
+    </style>
+
+    <!--
+        Кнопка в полосе инструментов (только альбом). Фон полосы жёлтый, поэтому у самой
+        кнопки фона нет — только отклик на нажатие; значок красится в цвет надписей на
+        акценте, как и значки бара в портрете.
+    -->
+    <style name="Tool">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/touch_target</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:tint">@color/on_accent</item>
+    </style>
+
+    <!-- Клавиша с цифрой. Крупная, спокойная, на всю доступную ширину. -->
+    <style name="Key" parent="@style/Button">
+        <item name="android:background">@drawable/bg_key</item>
+        <item name="android:textColor">@color/key_text</item>
+        <item name="android:textSize">@dimen/text_display</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Button.Primary">
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:textColor">@color/on_accent</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:paddingStart">@dimen/space_xl</item>
+        <item name="android:paddingEnd">@dimen/space_xl</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Button.Quiet">
+        <item name="android:background">@drawable/bg_button_quiet</item>
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:paddingStart">@dimen/space_xl</item>
+        <item name="android:paddingEnd">@dimen/space_xl</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Экран игры. На нём осталось ровно то, без чего не сделать ход: счётчики, доска
+    и клавиатура. Инструменты уехали в бар, выбор уровня — на экран новой игры;
+    освободившиеся сто с лишним точек высоты забрала доска и вышла на всю ширину экрана.
+
+    Доска стоит в растягивающейся середине и сама делает себя квадратной: на низком
+    экране она ужимается, а клавиатура остаётся на месте — промахиваться по ней нельзя
+    ни на каком телефоне.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/space_s">
+
+        <!-- Жизни, подсказки, часы -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/space_xs"
+            android:paddingEnd="@dimen/space_xs">
+
+            <LinearLayout
+                android:id="@+id/hearts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/hints"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_badge"
+                android:drawableStart="@drawable/ic_hint"
+                android:drawablePadding="@dimen/space_xs"
+                android:drawableTint="@color/on_surface"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/space_s"
+                android:paddingEnd="@dimen/space_m"
+                android:paddingTop="@dimen/space_xs"
+                android:paddingBottom="@dimen/space_xs"
+                android:textColor="@color/on_surface" />
+
+            <TextView
+                android:id="@+id/timer"
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_s"
+                android:background="@drawable/bg_badge"
+                android:paddingStart="@dimen/space_m"
+                android:paddingEnd="@dimen/space_m"
+                android:paddingTop="@dimen/space_xs"
+                android:paddingBottom="@dimen/space_xs"
+                android:textColor="@color/on_surface"
+                android:typeface="monospace" />
+        </LinearLayout>
+
+        <!-- Доска -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_s"
+            android:layout_weight="1">
+
+            <info.javaway.sudoku.ui.game.BoardView
+                android:id="@+id/board"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/generating"
+                style="@style/Text.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_badge"
+                android:padding="@dimen/space_m"
+                android:text="@string/generating"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <!-- Клавиатура -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/key_1"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_2"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_3"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_4"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_5"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/key_6"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_7"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_8"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/key_9"
+                style="@style/Key"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1" />
+
+            <ImageButton
+                android:id="@+id/key_erase"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/space_xs"
+                android:layout_weight="1"
+                android:background="@drawable/bg_key"
+                android:contentDescription="@string/erase"
+                android:minHeight="@dimen/touch_target"
+                android:scaleType="center"
+                android:src="@drawable/ic_erase"
+                android:stateListAnimator="@null"
+                android:tint="@color/on_surface" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+        Панель итогов: пауза, победа, поражение. Одна разметка на три случая — состав у них
+        совпадает, а три копии разошлись бы при первой же правке.
+    -->
+    <FrameLayout
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/space_xl"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/space_xl">
+
+            <TextView
+                android:id="@+id/panel_title"
+                style="@style/Text.Display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/panel_text"
+                style="@style/Text.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/panel_note"
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/panel_primary"
+                style="@style/Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l" />
+
+            <Button
+                android:id="@+id/panel_secondary"
+                style="@style/Button.Quiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <info.javaway.sudoku.ui.game.ConfettiView
+        android:id="@+id/confetti"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</FrameLayout>

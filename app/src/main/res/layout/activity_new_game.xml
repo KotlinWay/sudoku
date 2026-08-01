@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Выбор уровня. Раньше он стоял вкладками над доской и отнимал у неё полсотни точек
+    высоты ради решения, которое принимают раз в партию.
+
+    Каждый уровень подписан тем, чем он отличается: сколько цифр открыто и сколько ошибок
+    прощается. Без этого «сложно» и «эксперт» — просто слова.
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/space_l">
+
+        <!--
+            Начатая партия исчезнет — это видно до выбора, а не после него. Так каталожное
+            правило «деструктивное только с предпросмотром» выполняется без второго вопроса
+            вдогонку: человек читает цену там же, где принимает решение.
+        -->
+        <TextView
+            android:id="@+id/current"
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_m"
+            android:background="@drawable/bg_tile"
+            android:padding="@dimen/space_m"
+            android:visibility="gone" />
+
+        <include android:id="@+id/level_easy" layout="@layout/item_level" />
+
+        <include android:id="@+id/level_medium" layout="@layout/item_level" />
+
+        <include android:id="@+id/level_hard" layout="@layout/item_level" />
+
+        <include android:id="@+id/level_expert" layout="@layout/item_level" />
+
+        <include android:id="@+id/level_daily" layout="@layout/item_level" />
+    </LinearLayout>
+</ScrollView>

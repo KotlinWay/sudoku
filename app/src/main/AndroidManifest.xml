@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ни одного разрешения. Игра не ходит в сеть, не трогает файлы за пределами своей папки
+    и не вибрирует через Vibrator (отдача идёт через performHapticFeedback, которому
+    разрешение не нужно).
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:enableOnBackInvokedCallback="true">
+
+        <!--
+            configChanges: партия живёт в памяти экрана, и поворот телефона не должен
+            пересоздавать её и терять начатый ход. Разметку при этом система не перечитает —
+            это делает сам экран в onConfigurationChanged, потому что у альбома она своя.
+        -->
+        <activity
+            android:name=".ui.game.GameActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.newgame.NewGameActivity"
+            android:label="@string/new_game"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:label="@string/settings"
+            android:exported="false" />
+    </application>
+</manifest>

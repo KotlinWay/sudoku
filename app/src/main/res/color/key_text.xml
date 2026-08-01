@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Клавиша с цифрой. Расставленная девять раз цифра приглушается: искать её на клавиатуре
+    больше незачем. Нажатие при этом не запрещено — цифру бывает нужно переставить.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_activated="true" android:color="@color/on_surface" android:alpha="0.25" />
+    <item android:color="@color/on_surface" />
+</selector>

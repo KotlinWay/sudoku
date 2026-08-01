@@ -1,0 +1,11 @@
+# Сборка и кэши Gradle
+build/
+.gradle/
+
+# Путь к SDK свой на каждой машине
+local.properties
+
+# IDE
+.idea/
+*.iml
+.DS_Store

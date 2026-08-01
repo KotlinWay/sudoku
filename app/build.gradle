@@ -1,0 +1,45 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'info.javaway.sudoku'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "info.javaway.sudoku"
+        // 23, а не 21: с этого уровня цвет значка на кнопке задаётся разметкой
+        // (`android:drawableTint` плюс ColorStateList). Ниже пришлось бы перекрашивать
+        // значки кодом на каждой отрисовке — ровно та точечная правка интерфейса мимо
+        // состояния, которую проект запрещает. Android 6 вышел в 2015 году.
+        minSdk 23
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // Для замеров подписываем debug-ключом; боевой keystore — перед публикацией.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures { buildConfig true }
+
+    packaging {
+        // R8 кладёт в APK свои kotlin_builtins-ресурсы, хотя Kotlin в проекте нет.
+        resources { excludes += ['kotlin/**'] }
+    }
+}
+
+// Ни одной runtime-зависимости: всё, что нужно судоку, есть в платформе.
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Значки инструментов рисуются контуром в две точки со скруглёнными концами, а не заливкой.
+    Заливка на жёлтом баре собирается в чёрное пятно: цвет тот же, а массы вчетверо больше,
+    и глаз читает не значок, а кляксу. Контур держит тот же контраст при вчетверо меньшей массе.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M5,9.5h9a4.5,4.5 0 0 1 0,9h-4"
+        android:strokeColor="@color/on_accent"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M9,5.5L5,9.5L9,13.5"
+        android:strokeColor="@color/on_accent"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/space_xl">
+
+        <Switch
+            android:id="@+id/candidates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/candidates"
+            android:textColor="@color/on_background"
+            android:textSize="@dimen/text_body" />
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/candidates_hint" />
+
+        <Switch
+            android:id="@+id/sound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/sound"
+            android:textColor="@color/on_background"
+            android:textSize="@dimen/text_body" />
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sound_hint" />
+
+        <!-- Блокнот Енот -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl"
+            android:background="@drawable/bg_tile"
+            android:orientation="vertical"
+            android:padding="@dimen/space_l">
+
+            <TextView
+                style="@style/Text.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/raccoon_title" />
+
+            <TextView
+                style="@style/Text.Body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_s"
+                android:text="@string/raccoon_text" />
+
+            <Button
+                android:id="@+id/raccoon"
+                style="@style/Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:text="@string/raccoon_button" />
+        </LinearLayout>
+
+        <!--
+            Ссылки. Каждому пункту обязателен minHeight в тач-таргет: строка текста сама
+            по себе выходит высотой около 20dp, и попасть в неё пальцем невозможно.
+        -->
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl"
+            android:text="@string/links_section" />
+
+        <TextView
+            android:id="@+id/link_telegram"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_telegram" />
+
+        <TextView
+            android:id="@+id/link_max"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_max" />
+
+        <TextView
+            android:id="@+id/link_play"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_play" />
+
+        <TextView
+            android:id="@+id/link_rustore"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_rustore" />
+
+        <TextView
+            android:id="@+id/link_site"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_site" />
+
+        <TextView
+            android:id="@+id/link_rate"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_rate" />
+
+        <TextView
+            android:id="@+id/link_write"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/touch_target"
+            android:text="@string/link_write" />
+
+        <TextView
+            android:id="@+id/version"
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_l" />
+    </LinearLayout>
+</ScrollView>
