@@ -47,6 +47,9 @@ public abstract class SettingsAction {
     public static final class RateClicked extends SettingsAction {
     }
 
+    public static final class RaccoonClicked extends SettingsAction {
+    }
+
     public static final class WriteClicked extends SettingsAction {
     }
 }

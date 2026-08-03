@@ -17,8 +17,7 @@ public final class Links {
             "https://play.google.com/store/apps/dev?id=6023648979127962332";
     public static final String SITE = "https://javaway.info";
     public static final String EMAIL = "max.simple.apps@gmail.com";
-    public static final String RACCOON =
-            "https://play.google.com/store/apps/details?id=info.javaway.raccoon_notes";
+    private static final String RACCOON_ID = "info.javaway.raccoon_notes";
 
     /** Страница разработчика в RuStore. Одна на все приложения владельца. */
     public static final String RUSTORE_DEVELOPER = "https://www.rustore.ru/catalog/developer/a83331c1";
@@ -57,6 +56,20 @@ public final class Links {
         }
         return open(context, "market://details?id=" + id)
                 || open(context, "https://play.google.com/store/apps/details?id=" + id);
+    }
+
+    /**
+     * Карточка Блокнота Енота в том магазине, откуда стоит само приложение. Тот же довод,
+     * что у rate(): аудитория RuStore часто без Google Play, и ссылка на Play для неё мертва.
+     */
+    public static boolean raccoon(Context context) {
+        String installer = installerOf(context);
+        if (installer != null && installer.contains("rustore")) {
+            return open(context, "rustore://apps.rustore.ru/app/" + RACCOON_ID)
+                    || open(context, "https://apps.rustore.ru/app/" + RACCOON_ID);
+        }
+        return open(context, "market://details?id=" + RACCOON_ID)
+                || open(context, "https://play.google.com/store/apps/details?id=" + RACCOON_ID);
     }
 
     private static String installerOf(Context context) {

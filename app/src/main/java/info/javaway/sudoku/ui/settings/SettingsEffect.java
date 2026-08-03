@@ -55,6 +55,9 @@ public abstract class SettingsEffect {
     public static final class Rate extends SettingsEffect {
     }
 
+    public static final class Raccoon extends SettingsEffect {
+    }
+
     public static final class Write extends SettingsEffect {
     }
 }

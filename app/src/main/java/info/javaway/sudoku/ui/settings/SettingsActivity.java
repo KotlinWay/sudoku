@@ -69,7 +69,7 @@ public class SettingsActivity extends ThemedActivity
 
     private void bindViews() {
         findViewById(R.id.raccoon).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.RACCOON)));
+                v -> store.dispatch(new SettingsAction.RaccoonClicked()));
 
         // Версия не состояние экрана: она не меняется, пока приложение не переустановят.
         ((TextView) findViewById(R.id.version)).setText(version());
@@ -172,6 +172,8 @@ public class SettingsActivity extends ThemedActivity
             if (!Links.open(this, ((SettingsEffect.OpenLink) effect).url)) failed();
         } else if (effect instanceof SettingsEffect.Rate) {
             if (!Links.rate(this)) failed();
+        } else if (effect instanceof SettingsEffect.Raccoon) {
+            if (!Links.raccoon(this)) failed();
         } else if (effect instanceof SettingsEffect.Write) {
             if (!Links.write(this, version())) failed();
         }

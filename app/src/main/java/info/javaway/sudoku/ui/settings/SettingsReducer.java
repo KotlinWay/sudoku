@@ -38,6 +38,9 @@ public final class SettingsReducer
         if (action instanceof SettingsAction.RateClicked) {
             return Update.of(state, new SettingsEffect.Rate());
         }
+        if (action instanceof SettingsAction.RaccoonClicked) {
+            return Update.of(state, new SettingsEffect.Raccoon());
+        }
         if (action instanceof SettingsAction.WriteClicked) {
             return Update.of(state, new SettingsEffect.Write());
         }
