@@ -30,13 +30,8 @@
 
         <Switch
             android:id="@+id/candidates"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/candidates"
-            android:textColor="@color/on_background"
-            android:textSize="@dimen/text_body" />
+            style="@style/Toggle"
+            android:text="@string/candidates" />
 
         <TextView
             style="@style/Text.Caption"
@@ -46,14 +41,9 @@
 
         <Switch
             android:id="@+id/sound"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/Toggle"
             android:layout_marginTop="@dimen/space_l"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/sound"
-            android:textColor="@color/on_background"
-            android:textSize="@dimen/text_body" />
+            android:text="@string/sound" />
 
         <TextView
             style="@style/Text.Caption"

@@ -20,8 +20,12 @@
     <color name="accent_dark">#7A6420</color>
     <color name="on_accent">#070707</color>
     <color name="toolbar_line">#80000000</color>
-    <!-- В тёмной теме фон диалога тёмный, и тёмное золото на нём пропало бы: берём само золото. -->
-    <color name="dialog_accent">#D4AF37</color>
+    <!--
+        В тёмной теме поверхность тёмная, и тёмное золото на ней пропало бы: берём само
+        золото. На угольном фоне оно даёт 8,3:1, так что переключатели, радиокнопки
+        и кнопки диалога здесь и так были видны — правка светлой темы их не трогает.
+    -->
+    <color name="accent_on_surface">#D4AF37</color>
 
     <color name="background">#1A1A1A</color>
     <color name="surface">#252525</color>

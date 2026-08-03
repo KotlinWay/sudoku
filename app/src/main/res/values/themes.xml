@@ -3,7 +3,23 @@
     <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="android:colorBackground">@color/background</item>
         <item name="android:colorPrimary">@color/accent</item>
-        <item name="android:colorAccent">@color/accent</item>
+        <!--
+            Акцент виджетов — тёмная доля золота, а не сам жёлтый. Платформа красит им
+            тонкие вещи: включённый ползунок, отмеченную радиокнопку. Жёлтый #FFD33E на
+            почти белой странице давал 1,3:1, и органы управления на экране настроек
+            приходилось искать глазами. Заливкой жёлтый остался: бар, выбранная клетка,
+            нажатая клавиша — там он работает площадью, и контраст считается по надписи
+            на нём, а не по нему самому.
+        -->
+        <item name="android:colorAccent">@color/accent_on_surface</item>
+        <item name="android:colorControlActivated">@color/accent_on_surface</item>
+        <!--
+            Выключенный переключатель платформа рисует почти белым, а радиокнопку — тонким
+            светлым кольцом: на странице #F1F1EC это белое по белому. Берём приглушённый
+            цвет подписей, он даёт 5,3:1 в светлой теме и 6,2:1 в тёмной. Состояние при
+            этом читается положением ползунка и наличием точки, а не одним лишь цветом.
+        -->
+        <item name="android:colorControlNormal">@color/muted</item>
         <item name="android:textColorPrimary">@color/on_background</item>
         <item name="android:textColorSecondary">@color/muted</item>
         <item name="android:windowBackground">@color/background</item>
@@ -87,7 +103,7 @@
         диалог остался бы тёмным в светлой теме.
     -->
     <style name="AlertDialog" parent="@android:style/Theme.DeviceDefault.Light.Dialog.Alert">
-        <item name="android:colorAccent">@color/dialog_accent</item>
+        <item name="android:colorAccent">@color/accent_on_surface</item>
     </style>
 
     <!--
@@ -152,13 +168,40 @@
         <item name="android:background">@color/divider</item>
     </style>
 
-    <!-- Строка выбора из нескольких. Кружок красится акцентом, подпись — цветом текста. -->
+    <!--
+        Строка выбора из нескольких. Кружок красится списком состояний, а не одним цветом:
+        отмеченный — акцентом, пустые — приглушённым. Одним `accent` он красился раньше,
+        и пустые кольца жёлтым по почти белому давали 1,3:1.
+    -->
     <style name="Choice" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">@dimen/touch_target</item>
-        <item name="android:buttonTint">@color/accent</item>
+        <item name="android:buttonTint">@color/control</item>
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <!--
+        Переключатель настройки. Заведён стилем, а не шестью повторяющимися атрибутами
+        на каждом из двух: тинты ползунка и дорожки всё равно пришлось бы держать
+        одинаковыми, а расходятся такие пары при первой же правке.
+
+        Тинт задаётся здесь, а не темой: платформенный `colorSwitchThumbNormal`,
+        который красит выключенный ползунок, помечен private — линковка на нём падает.
+
+        Предка у стиля нет, и это не забывчивость: `Widget.DeviceDefault.CompoundButton.Switch`
+        в платформе тоже private. Он и не нужен — всё, что здесь не перечислено, виджет
+        возьмёт из `switchStyle` темы, как берёт и без нашего стиля.
+    -->
+    <style name="Toggle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:thumbTint">@color/control</item>
+        <item name="android:trackTint">@color/switch_track</item>
         <item name="android:textColor">@color/on_background</item>
         <item name="android:textSize">@dimen/text_body</item>
     </style>

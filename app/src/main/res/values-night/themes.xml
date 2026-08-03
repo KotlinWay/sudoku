@@ -13,6 +13,6 @@
 -->
 <resources>
     <style name="AlertDialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
-        <item name="android:colorAccent">@color/dialog_accent</item>
+        <item name="android:colorAccent">@color/accent_on_surface</item>
     </style>
 </resources>
