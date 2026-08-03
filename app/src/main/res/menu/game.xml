@@ -12,11 +12,11 @@
         android:icon="@drawable/ic_undo"
         android:showAsAction="always"
         android:title="@string/tool_undo" />
-    <item
-        android:id="@+id/menu_hint"
-        android:icon="@drawable/ic_hint"
-        android:showAsAction="always"
-        android:title="@string/tool_hint" />
+    <!--
+        Подсказки здесь нет намеренно. Она живёт счётчиком-кнопкой над доской: там же,
+        где написано, сколько её осталось. Значок в баре был вторым таким же на экране,
+        и человек не мог знать, какая из двух лампочек нажимается.
+    -->
     <item
         android:id="@+id/menu_pause"
         android:icon="@drawable/ic_pause"

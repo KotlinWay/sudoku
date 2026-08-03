@@ -21,6 +21,7 @@
 
         <!-- Жизни, подсказки, часы -->
         <LinearLayout
+            android:id="@+id/counters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -39,21 +40,34 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
+            <!--
+                Счётчик подсказок он же кнопка «взять подсказку». Раньше подсказку давала
+                лампочка в баре, а здесь стояла вторая такая же и молчала на нажатие —
+                два одинаковых значка, из которых работал один. Теперь лампочка одна:
+                показывает остаток и даёт подсказку.
+
+                Ростом плашка осталась прежней, 32dp. Норматив тач-таргета ей даёт
+                GameActivity.expandHintTouch() — у платформы размер вьюхи и размер зоны
+                нажатия это разные вещи. Поднять саму плашку до 48dp значило бы поднять
+                весь ряд, а ряд стоит над доской: в портрете доска теряла 12dp стороны,
+                в альбоме на те же 16dp худели клавиши и уходили под норматив сами.
+            -->
             <TextView
                 android:id="@+id/hints"
                 style="@style/Text.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_badge"
+                android:background="@drawable/bg_badge_button"
                 android:drawableStart="@drawable/ic_hint"
                 android:drawablePadding="@dimen/space_xs"
-                android:drawableTint="@color/on_surface"
+                android:drawableTint="@color/badge_hint"
+                android:focusable="true"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/space_s"
                 android:paddingEnd="@dimen/space_m"
                 android:paddingTop="@dimen/space_xs"
                 android:paddingBottom="@dimen/space_xs"
-                android:textColor="@color/on_surface" />
+                android:textColor="@color/badge_hint" />
 
             <TextView
                 android:id="@+id/timer"

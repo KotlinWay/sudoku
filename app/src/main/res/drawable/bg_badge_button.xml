@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Плашка, которую нажимают. Отличается от `bg_badge` только откликом на нажатие:
+    форма и цвет те же, чтобы счётчик подсказок стоял в одном ряду с часами и не выглядел
+    пришельцем. Нажатое состояние красится акцентом — ровно как у клавиши в `bg_key`,
+    другого способа показать нажатие в приложении нет: теней тут не отбрасывает ничто.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/touch_target" />
+            <solid android:color="@color/accent" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/touch_target" />
+            <solid android:color="@color/surface" />
+        </shape>
+    </item>
+</selector>

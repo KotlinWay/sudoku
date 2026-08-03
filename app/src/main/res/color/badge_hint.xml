@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Цифра и лампочка на счётчике подсказок. Гаснут вместе, когда подсказку взять нельзя:
+    подсказки кончились или партия на паузе.
+
+    Гашение объявлено здесь, а не выставляется кодом, потому что может: `android:alpha`
+    в списке состояний доступен с API 23, а это ровно minSdk проекта. Платформа сама
+    недоступный TextView не гасит — у неё для этого нет причины, пока не сказано,
+    что он кнопка.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:alpha="0.4" android:color="@color/on_surface" />
+    <item android:color="@color/on_surface" />
+</selector>

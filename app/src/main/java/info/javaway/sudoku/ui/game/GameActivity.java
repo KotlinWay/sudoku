@@ -3,6 +3,7 @@ package info.javaway.sudoku.ui.game;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.TouchDelegate;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -88,7 +90,6 @@ public class GameActivity extends ThemedActivity
 
     /** Полоса инструментов слева. Заведена только в альбоме, где бар спрятан. */
     private ImageButton toolUndo;
-    private ImageButton toolHint;
     private ImageButton toolPause;
 
     private boolean landscape;
@@ -221,15 +222,58 @@ public class GameActivity extends ThemedActivity
         }
         erase.setOnClickListener(v -> store.dispatch(new GameAction.EraseTapped()));
 
+        // Счётчик подсказок он же кнопка. Слушатель ставится обеим ориентациям: плашка
+        // есть и в портрете, и в альбоме, а лампочки в баре и в полосе больше нет.
+        hints.setOnClickListener(v -> store.dispatch(new GameAction.HintTapped()));
+        expandHintTouch();
+
         if (!landscape) return;
         toolUndo = findViewById(R.id.tool_undo);
-        toolHint = findViewById(R.id.tool_hint);
         toolPause = findViewById(R.id.tool_pause);
 
         toolUndo.setOnClickListener(v -> store.dispatch(new GameAction.UndoTapped()));
-        toolHint.setOnClickListener(v -> store.dispatch(new GameAction.HintTapped()));
         toolPause.setOnClickListener(v -> store.dispatch(new GameAction.PauseToggled()));
         findViewById(R.id.tool_more).setOnClickListener(this::showMore);
+    }
+
+    /**
+     * Даёт счётчику подсказок зону нажатия 48dp, не увеличивая саму плашку.
+     *
+     * Плашка ростом 32dp, и поднимать её нельзя: она стоит в ряду над доской, а ряд —
+     * над клавишами. Поднять плашку значит поднять ряд, и тогда в портрете доска теряет
+     * 12dp стороны, а в альбоме на 16dp худеют клавиши и уходят под тот же норматив,
+     * ради которого всё затевалось. Замерено на эмуляторе, а не предположено.
+     *
+     * Недостающие точки берутся у отступов вокруг ряда: сверху это внутренний отступ
+     * страницы, снизу — зазор до доски. Кликать там всё равно не по чему, поэтому зона
+     * ничего не отнимает у соседей. Делегат вешается на родителя ряда, а не на сам ряд:
+     * прямоугольник выходит за границы ряда, а до делегата доходят только те нажатия,
+     * которые получила вьюха, на которой он стоит.
+     *
+     * Пересчитывается при каждой перекладке: ширина плашки меняется вместе с числом,
+     * а в альбоме ряд ещё и переезжает вслед за длиной названия уровня.
+     */
+    private void expandHintTouch() {
+        View row = findViewById(R.id.counters);
+        View host = (View) row.getParent();
+        int min = getResources().getDimensionPixelSize(R.dimen.touch_target);
+        row.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+            Rect rect = new Rect();
+            hints.getHitRect(rect);
+            rect.offset(row.getLeft(), row.getTop());
+            grow(rect, min);
+            host.setTouchDelegate(new TouchDelegate(rect, hints));
+        });
+    }
+
+    /** Раздувает прямоугольник до заданной стороны, оставляя его центр на месте. */
+    private static void grow(Rect rect, int min) {
+        int dx = Math.max(0, min - rect.width());
+        int dy = Math.max(0, min - rect.height());
+        rect.left -= dx / 2;
+        rect.right += dx - dx / 2;
+        rect.top -= dy / 2;
+        rect.bottom += dy - dy / 2;
     }
 
     /* ── Отрисовка ────────────────────────────────────────────────────────── */
@@ -278,7 +322,9 @@ public class GameActivity extends ThemedActivity
         hearts.setContentDescription(getString(R.string.lives_desc, Math.max(0, left), limit));
 
         hints.setText(String.valueOf(state.hintsLeft));
-        hints.setContentDescription(getString(R.string.hints_desc, state.hintsLeft));
+        // Плашка теперь кнопка, поэтому описание говорит и что будет, и сколько осталось:
+        // роль «кнопка» TalkBack добавит сам.
+        hints.setContentDescription(getString(R.string.hint_button_desc, state.hintsLeft));
 
         String time = Labels.time(this, state.seconds);
         timer.setText(time);
@@ -308,10 +354,13 @@ public class GameActivity extends ThemedActivity
         int pauseIcon = paused ? R.drawable.ic_play : R.drawable.ic_pause;
         int pauseTitle = paused ? R.string.resume : R.string.tool_pause;
 
+        // Подсказка не зависит от ориентации: её кнопка это счётчик над доской, и он один
+        // на обе разметки. Гашение цифры и лампочки берёт на себя `color/badge_hint`.
+        hints.setEnabled(hint);
+
         if (landscape) {
             // «Ещё» доступно всегда: под ним статистика и настройки, нужные и после партии.
             tool(toolUndo, undo, R.drawable.ic_undo, R.string.tool_undo);
-            tool(toolHint, hint, R.drawable.ic_hint, R.string.tool_hint);
             tool(toolPause, pause, pauseIcon, pauseTitle);
             return;
         }
@@ -321,7 +370,6 @@ public class GameActivity extends ThemedActivity
         if (menu == null) return;
 
         enable(menu.findItem(R.id.menu_undo), undo);
-        enable(menu.findItem(R.id.menu_hint), hint);
 
         MenuItem pauseItem = menu.findItem(R.id.menu_pause);
         enable(pauseItem, pause);
@@ -359,7 +407,6 @@ public class GameActivity extends ThemedActivity
 
         Menu items = popup.getMenu();
         items.findItem(R.id.menu_undo).setVisible(false);
-        items.findItem(R.id.menu_hint).setVisible(false);
         items.findItem(R.id.menu_pause).setVisible(false);
 
         popup.setOnMenuItemClickListener(this::onOptionsItemSelected);
@@ -487,8 +534,6 @@ public class GameActivity extends ThemedActivity
         int id = item.getItemId();
         if (id == R.id.menu_undo) {
             store.dispatch(new GameAction.UndoTapped());
-        } else if (id == R.id.menu_hint) {
-            store.dispatch(new GameAction.HintTapped());
         } else if (id == R.id.menu_pause) {
             store.dispatch(new GameAction.PauseToggled());
         } else if (id == R.id.menu_new) {
