@@ -1,5 +1,16 @@
 plugins { id 'com.android.application' }
 
+// Боевой ключ подключается файлом `keystore.properties` в корне репозитория — он в .gitignore.
+// Файла нет (чужая машина, CI, свежий клон) — release собирается неподписанным, и это
+// намеренно: debug-ключ здесь стоял для замеров размера, а в магазин с ним уходить нельзя.
+// Он одинаковый у всех разработчиков мира, то есть обновление к приложению сможет
+// выпустить кто угодно.
+def keystoreProps = new Properties()
+def keystoreFile = rootProject.file('keystore.properties')
+if (keystoreFile.exists()) {
+    keystoreFile.withInputStream { keystoreProps.load(it) }
+}
+
 android {
     namespace 'info.javaway.sudoku'
     compileSdk 36
@@ -16,13 +27,25 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        if (keystoreProps.containsKey('storeFile')) {
+            release {
+                storeFile rootProject.file(keystoreProps['storeFile'])
+                storePassword keystoreProps['storePassword']
+                keyAlias keystoreProps['keyAlias']
+                keyPassword keystoreProps['keyPassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // Для замеров подписываем debug-ключом; боевой keystore — перед публикацией.
-            signingConfig signingConfigs.debug
+            if (keystoreProps.containsKey('storeFile')) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
