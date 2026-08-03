@@ -49,6 +49,14 @@
     <style name="Overflow" parent="@android:style/Widget.DeviceDefault.ActionButton.Overflow">
         <item name="android:src">@drawable/ic_more</item>
         <item name="android:tint">@color/on_accent</item>
+        <!--
+            Платформа даёт кнопке переполнения 40dp по ширине — у неё своя мера,
+            `action_button_min_width_overflow_material`, а не общая 48dp, которая стоит
+            у остальных пунктов бара. Замерено дампом дерева доступности на экране настроек:
+            40x48. Ширину поднимаем до общего норматива: это единственное место
+            в приложении, где тач-таргет был меньше 48dp.
+        -->
+        <item name="android:minWidth">@dimen/touch_target</item>
     </style>
 
     <!--
