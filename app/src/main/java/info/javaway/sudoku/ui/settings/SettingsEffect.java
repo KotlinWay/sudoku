@@ -2,11 +2,14 @@ package info.javaway.sudoku.ui.settings;
 
 import info.javaway.sudoku.settings.Theme;
 
-/** Одноразовые команды наружу: запись на диск и открытие ссылок. */
+/**
+ * Одноразовые команды наружу: запись на диск и открытие ссылок.
+ *
+ * Чтения тут нет: настройки читаются синхронно до первой отрисовки, потому что файл
+ * настроек к этому моменту всё равно уже в памяти — его открыл {@code ThemedActivity},
+ * когда выбирал тему в {@code attachBaseContext}.
+ */
 public abstract class SettingsEffect {
-
-    public static final class Load extends SettingsEffect {
-    }
 
     public static final class SaveCandidates extends SettingsEffect {
         public final boolean value;

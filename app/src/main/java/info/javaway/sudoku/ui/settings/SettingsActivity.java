@@ -24,8 +24,11 @@ import info.javaway.sudoku.ui.mvi.Store;
 public class SettingsActivity extends ThemedActivity
         implements Store.View<SettingsState>, Store.Effects<SettingsEffect> {
 
-    private final Store<SettingsState, SettingsAction, SettingsEffect> store =
-            new Store<>(SettingsState.initial(), new SettingsReducer());
+    /**
+     * Собирается в onCreate, а не полем: состояние сразу настоящее, а прочитать настройки
+     * в инициализаторе поля нельзя — базового контекста у экрана к тому моменту ещё нет.
+     */
+    private Store<SettingsState, SettingsAction, SettingsEffect> store;
 
     private Prefs prefs;
     private Switch candidates;
@@ -42,9 +45,17 @@ public class SettingsActivity extends ThemedActivity
         sound = findViewById(R.id.sound);
         theme = findViewById(R.id.theme);
 
+        // Чтение с диска на главном потоке, и это дешевле, чем кажется: файл настроек уже
+        // открыт и разобран — его прочитал ThemedActivity в attachBaseContext, когда выбирал
+        // тему для этого же экрана. Фоновое чтение здесь покупало не отзывчивость, а лишнюю
+        // отрисовку: экран успевал показать значения по умолчанию, а через кадр переставить
+        // их на настоящие, и человек видел, как переключатели сами перещёлкиваются.
+        store = new Store<>(
+                SettingsState.of(prefs.candidates(), prefs.sound(), prefs.theme()),
+                new SettingsReducer());
+
         bindViews();
         store.attach(this, this);
-        handle(new SettingsEffect.Load());
     }
 
     @Override
@@ -137,15 +148,7 @@ public class SettingsActivity extends ThemedActivity
 
     @Override
     public void handle(SettingsEffect effect) {
-        if (effect instanceof SettingsEffect.Load) {
-            Background.work(() -> {
-                boolean showCandidates = prefs.candidates();
-                boolean playSound = prefs.sound();
-                Theme value = prefs.theme();
-                Background.main(() -> store.dispatch(
-                        new SettingsAction.Loaded(showCandidates, playSound, value)));
-            });
-        } else if (effect instanceof SettingsEffect.SaveCandidates) {
+        if (effect instanceof SettingsEffect.SaveCandidates) {
             boolean value = ((SettingsEffect.SaveCandidates) effect).value;
             Background.work(() -> prefs.setCandidates(value));
         } else if (effect instanceof SettingsEffect.SaveSound) {

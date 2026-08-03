@@ -10,10 +10,6 @@ public final class SettingsReducer
     @Override
     public Update<SettingsState, SettingsEffect> reduce(SettingsState state,
                                                         SettingsAction action) {
-        if (action instanceof SettingsAction.Loaded) {
-            SettingsAction.Loaded loaded = (SettingsAction.Loaded) action;
-            return Update.state(state.loaded(loaded.candidates, loaded.sound, loaded.theme));
-        }
         if (action instanceof SettingsAction.CandidatesToggled) {
             boolean value = ((SettingsAction.CandidatesToggled) action).value;
             return Update.of(state.candidates(value), new SettingsEffect.SaveCandidates(value));

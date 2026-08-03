@@ -15,12 +15,12 @@ public final class SettingsState {
         this.theme = theme;
     }
 
-    /** Пока настройки не прочитаны с диска, показываем значения по умолчанию. */
-    public static SettingsState initial() {
-        return new SettingsState(false, true, Theme.SYSTEM);
-    }
-
-    public SettingsState loaded(boolean candidates, boolean sound, Theme theme) {
+    /**
+     * Состояние, с которым экран открывается. Настройки читаются до первой отрисовки,
+     * поэтому промежуточного состояния «ещё не прочитано» у экрана нет — а вместе с ним
+     * нет и переключателей, доигрывающих анимацию на глазах у открывшего экран.
+     */
+    public static SettingsState of(boolean candidates, boolean sound, Theme theme) {
         return new SettingsState(candidates, sound, theme);
     }
 
