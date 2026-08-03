@@ -20,11 +20,8 @@ public final class Links {
     public static final String RACCOON =
             "https://play.google.com/store/apps/details?id=info.javaway.raccoon_notes";
 
-    /**
-     * Адрес страницы разработчика в RuStore. Пока не получен от владельца — строка пустая,
-     * и пункт в настройках не показывается.
-     */
-    public static final String RUSTORE_DEVELOPER = "";
+    /** Страница разработчика в RuStore. Одна на все приложения владельца. */
+    public static final String RUSTORE_DEVELOPER = "https://www.rustore.ru/catalog/developer/a83331c1";
 
     public static boolean open(Context context, String url) {
         if (url == null || url.isEmpty()) return false;

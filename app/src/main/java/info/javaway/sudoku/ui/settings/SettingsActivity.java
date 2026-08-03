@@ -32,9 +32,6 @@ public class SettingsActivity extends ThemedActivity
     private Switch sound;
     private RadioGroup theme;
 
-    /** Меню бара. Приходит позже первой отрисовки, поэтому проверяется на null. */
-    private Menu menu;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +64,6 @@ public class SettingsActivity extends ThemedActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.settings, menu);
-        this.menu = menu;
-        // Меню пришло после первой отрисовки: показать его тем же render, а не правкой мимо него.
-        render(store.state());
         return true;
     }
 
@@ -103,10 +97,6 @@ public class SettingsActivity extends ThemedActivity
         bind(sound, state.sound,
                 value -> store.dispatch(new SettingsAction.SoundToggled(value)));
         bindTheme(state.theme);
-        // Пункт без адреса — обманка: нажимать не на что, пока владелец не даст ссылку.
-        if (menu != null) {
-            menu.findItem(R.id.menu_rustore).setVisible(!Links.RUSTORE_DEVELOPER.isEmpty());
-        }
     }
 
     /**
