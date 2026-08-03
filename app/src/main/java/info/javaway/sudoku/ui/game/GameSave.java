@@ -28,8 +28,14 @@ public final class GameSave {
 
     private static final String NAME = "game.bin";
 
-    /** Метка формата. Другая версия — не ошибка, а причина начать партию заново. */
-    private static final int VERSION = 1;
+    /**
+     * Метка формата. Другая версия — не ошибка, а причина начать партию заново.
+     *
+     * Версия 2: из формата ушли стек отменённых ходов и состояние «после» у каждого хода —
+     * и то и другое читал только «вернуть», а его в игре больше нет.
+     * Версия 3: ушёл признак «это задача дня» — самого режима в игре больше нет.
+     */
+    private static final int VERSION = 3;
 
     private final File file;
 
@@ -48,7 +54,6 @@ public final class GameSave {
 
             GameState.Draft draft = GameState.draft();
             draft.level = Difficulty.byName(in.readUTF(), Difficulty.MEDIUM);
-            draft.daily = in.readBoolean();
 
             int[] puzzle = readCells(in);
             int[] solution = readCells(in);
@@ -57,7 +62,12 @@ public final class GameSave {
             draft.board = Board.restored(puzzle, solution, values, notes);
 
             draft.selected = clamp(in.readInt());
-            draft.pencil = in.readBoolean();
+            // Байт карандаша читается и выбрасывается: кнопки, которая его выключает, сейчас
+            // нет, и партия, сохранённая с включённым карандашом, застряла бы в пометках
+            // навсегда. Из формата байт не убран намеренно: механизм карандаша цел и ждёт
+            // кнопку, так что вернуть его — одна строка здесь и две в разметке.
+            in.readBoolean();
+            draft.pencil = false;
             draft.mistakes = in.readInt();
             draft.hintsLeft = in.readInt();
             draft.hintsUsed = in.readInt();
@@ -67,12 +77,11 @@ public final class GameSave {
             draft.phase = paused ? GameState.Phase.PAUSED : GameState.Phase.PLAYING;
             draft.panel = paused;
 
-            draft.history = History.of(readMoves(in), readMoves(in));
+            draft.history = History.of(readMoves(in));
 
             // Настройка кандидатов живёт в настройках, а не в партии: включив её один раз,
             // человек ждёт её и в старой игре тоже.
             draft.candidates = candidates;
-            draft.pencil = draft.pencil && !candidates;
             draft.best = Stats.NO_TIME;
             draft.record = false;
             return draft.build();
@@ -93,7 +102,6 @@ public final class GameSave {
                 new BufferedOutputStream(new FileOutputStream(file)))) {
             out.writeInt(VERSION);
             out.writeUTF(state.level.name());
-            out.writeBoolean(state.daily);
 
             writeCells(out, state.board.puzzle());
             writeCells(out, state.board.solution());
@@ -109,7 +117,6 @@ public final class GameSave {
             out.writeBoolean(state.phase == GameState.Phase.PAUSED);
 
             writeMoves(out, state.history.done());
-            writeMoves(out, state.history.undone());
         } catch (IOException e) {
             // Не смогли сохранить — игра от этого не ломается, партия просто не переживёт выход.
             clear();

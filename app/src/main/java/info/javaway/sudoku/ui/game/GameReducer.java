@@ -20,8 +20,7 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
     @Override
     public Update<GameState, GameEffect> reduce(GameState state, GameAction action) {
         if (action instanceof GameAction.NewGame) {
-            GameAction.NewGame game = (GameAction.NewGame) action;
-            return generate(state, game.level, game.daily);
+            return generate(state, ((GameAction.NewGame) action).level);
         }
         if (action instanceof GameAction.Generated) {
             return Update.state(state.started(((GameAction.Generated) action).board));
@@ -40,9 +39,6 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
         }
         if (action instanceof GameAction.UndoTapped) {
             return undo(state);
-        }
-        if (action instanceof GameAction.RedoTapped) {
-            return redo(state);
         }
         if (action instanceof GameAction.HintTapped) {
             return hint(state);
@@ -73,10 +69,9 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
      * правило «деструктивное только с предпросмотром» выполнено предпросмотром, а не
      * подтверждением вдогонку.
      */
-    private Update<GameState, GameEffect> generate(GameState state, Difficulty level,
-                                                   boolean daily) {
-        return Update.of(GameState.generating(level, daily, state.candidates),
-                new GameEffect.Generate(level, daily));
+    private Update<GameState, GameEffect> generate(GameState state, Difficulty level) {
+        return Update.of(GameState.generating(level, state.candidates),
+                new GameEffect.Generate(level));
     }
 
     private Update<GameState, GameEffect> select(GameState state, int cell) {
@@ -142,13 +137,6 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
                 new GameEffect.Respond(GameEffect.Feedback.ERASE));
     }
 
-    private Update<GameState, GameEffect> redo(GameState state) {
-        if (!state.accepts() || !state.history.canRedo()) return Update.state(state);
-        Move move = state.history.lastUndone();
-        return Update.of(state.redone(move.redo(state.board), move),
-                new GameEffect.Respond(GameEffect.Feedback.ERASE));
-    }
-
     /**
      * Подсказка открывает верную цифру. Если клетка выбрана — именно её: игрок показал, где
      * застрял. Иначе берётся пустая клетка по счётчику секунд и потраченных подсказок:
@@ -191,8 +179,7 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
         if (!state.board.isSolved()) return update(state, effects);
         effects.add(new GameEffect.Respond(GameEffect.Feedback.WIN));
         effects.add(new GameEffect.Celebrate());
-        effects.add(new GameEffect.RecordWin(state.level, state.daily, state.seconds,
-                state.hintsUsed));
+        effects.add(new GameEffect.RecordWin(state.level, state.seconds, state.hintsUsed));
         return update(state.finished(GameState.Phase.WON), effects);
     }
 

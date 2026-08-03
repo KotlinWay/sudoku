@@ -25,7 +25,7 @@ public class GeneratorTest {
                 Generator.solved(new Rng(1)), Generator.solved(new Rng(2))));
     }
 
-    /** На этом держится задача дня: у всех в один день она обязана быть одной и той же. */
+    /** На этом держатся тесты: доска по seed обязана получаться одна и та же. */
     @Test public void одинаковыйSeedДаётОдинаковуюЗадачу() {
         Board first = Generator.board(Difficulty.MEDIUM, new Rng(777));
         Board second = Generator.board(Difficulty.MEDIUM, new Rng(777));

@@ -2,7 +2,6 @@ package info.javaway.sudoku.game;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
@@ -32,22 +31,6 @@ public class DayTest {
         int previous = day("Asia/Vladivostok", 2026, Calendar.AUGUST, 1, 1).number;
 
         assertEquals(previous, local);
-    }
-
-    @Test public void уровеньЗадачиДняХодитПоКругу() {
-        Difficulty first = new Day(0).level();
-
-        assertEquals(first, new Day(4).level());
-        assertNotEquals(first, new Day(3).level());
-    }
-
-    @Test public void уровеньЕстьУЛюбогоНомераВключаяОтрицательный() {
-        assertTrue(new Day(-1).level() != null);
-        assertTrue(new Day(-100).level() != null);
-    }
-
-    @Test public void seedРазныйУСоседнихДней() {
-        assertNotEquals(new Day(100).seed(), new Day(101).seed());
     }
 
     @Test public void вчерашнийДеньУзнаётся() {

@@ -7,13 +7,12 @@ import info.javaway.sudoku.game.Difficulty;
 
 /**
  * Подписи, которые нужны больше чем одному экрану: название уровня, его отличия и время.
- * Заведено, чтобы «Задача дня» и «03:12» не разошлись между экраном игры, экраном новой
- * игры и статистикой — а разошлись бы они при первой же правке одной из трёх копий.
+ * Заведено, чтобы «Эксперт» и «03:12» не разошлись между экраном игры, экраном новой игры
+ * и статистикой — а разошлись бы они при первой же правке одной из трёх копий.
  */
 public final class Labels {
 
-    public static String level(Context context, Difficulty level, boolean daily) {
-        if (daily) return context.getString(R.string.level_daily);
+    public static String level(Context context, Difficulty level) {
         switch (level) {
             case EASY: return context.getString(R.string.level_easy);
             case MEDIUM: return context.getString(R.string.level_medium);

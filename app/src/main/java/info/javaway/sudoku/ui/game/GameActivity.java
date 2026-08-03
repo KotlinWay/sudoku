@@ -1,6 +1,5 @@
 package info.javaway.sudoku.ui.game;
 
-import android.app.Activity;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -36,6 +35,7 @@ import info.javaway.sudoku.stats.Outcome;
 import info.javaway.sudoku.stats.Stats;
 import info.javaway.sudoku.stats.StatsStore;
 import info.javaway.sudoku.ui.Labels;
+import info.javaway.sudoku.ui.ThemedActivity;
 import info.javaway.sudoku.ui.mvi.Store;
 import info.javaway.sudoku.ui.newgame.NewGameActivity;
 import info.javaway.sudoku.ui.settings.SettingsActivity;
@@ -48,7 +48,7 @@ import info.javaway.sudoku.ui.settings.SettingsActivity;
  * Инструменты живут значками в баре, выбор уровня — на отдельном экране: и то и другое
  * стоило доске высоты, а доске нужна вся, какую экран может дать.
  */
-public class GameActivity extends Activity
+public class GameActivity extends ThemedActivity
         implements Store.View<GameState>, Store.Effects<GameEffect> {
 
     private static final long TICK_MILLIS = 1000;
@@ -88,7 +88,6 @@ public class GameActivity extends Activity
 
     /** Полоса инструментов слева. Заведена только в альбоме, где бар спрятан. */
     private ImageButton toolUndo;
-    private ImageButton toolPencil;
     private ImageButton toolHint;
     private ImageButton toolPause;
 
@@ -125,10 +124,10 @@ public class GameActivity extends Activity
         GameState restored = save.load(prefs.candidates());
         store = new Store<>(restored != null
                 ? restored
-                : GameState.generating(Difficulty.EASY, false, prefs.candidates()),
+                : GameState.generating(Difficulty.EASY, prefs.candidates()),
                 new GameReducer());
         store.attach(this, this);
-        if (restored == null) generate(Difficulty.EASY, false);
+        if (restored == null) generate(Difficulty.EASY);
     }
 
     @Override
@@ -224,12 +223,10 @@ public class GameActivity extends Activity
 
         if (!landscape) return;
         toolUndo = findViewById(R.id.tool_undo);
-        toolPencil = findViewById(R.id.tool_pencil);
         toolHint = findViewById(R.id.tool_hint);
         toolPause = findViewById(R.id.tool_pause);
 
         toolUndo.setOnClickListener(v -> store.dispatch(new GameAction.UndoTapped()));
-        toolPencil.setOnClickListener(v -> store.dispatch(new GameAction.PencilToggled()));
         toolHint.setOnClickListener(v -> store.dispatch(new GameAction.HintTapped()));
         toolPause.setOnClickListener(v -> store.dispatch(new GameAction.PauseToggled()));
         findViewById(R.id.tool_more).setOnClickListener(this::showMore);
@@ -245,7 +242,7 @@ public class GameActivity extends Activity
         // Уровень назван в заголовке: вкладок над доской больше нет, а знать, во что играешь,
         // надо. Место в баре всё равно пустовало. В альбоме бара нет, и уровень подписан
         // строкой над клавишами — заголовок всё равно ставим, его показывают «недавние».
-        String name = Labels.level(this, state.level, state.daily);
+        String name = Labels.level(this, state.level);
         setTitle(name);
         if (level != null) level.setText(name);
 
@@ -301,26 +298,19 @@ public class GameActivity extends Activity
      * это лечь, решает ориентация: в портрете инструменты живут пунктами бара, в альбоме —
      * кнопками полосы слева. Условия общие: разведи их по двум местам, и правило «подсказка
      * недоступна, когда подсказок нет» разойдётся между ориентациями при первой же правке.
-     *
-     * Включённый карандаш показан другим значком, а не оттенком того же: на жёлтом разницу
-     * в оттенке не видно, а подменённый значок виден и боковым зрением.
      */
     private void renderTools(GameState state) {
         boolean paused = state.phase == GameState.Phase.PAUSED;
         boolean undo = state.accepts() && state.history.canUndo();
-        boolean pencil = state.accepts() && !state.candidates;
         boolean hint = state.accepts() && state.hintsLeft > 0;
         boolean pause = state.accepts() || paused;
 
-        int pencilIcon = state.pencil ? R.drawable.ic_pencil_on : R.drawable.ic_pencil;
-        int pencilTitle = state.pencil ? R.string.pencil_on_desc : R.string.pencil_off_desc;
         int pauseIcon = paused ? R.drawable.ic_play : R.drawable.ic_pause;
-        int pauseTitle = paused ? R.string.tool_resume : R.string.tool_pause;
+        int pauseTitle = paused ? R.string.resume : R.string.tool_pause;
 
         if (landscape) {
             // «Ещё» доступно всегда: под ним статистика и настройки, нужные и после партии.
             tool(toolUndo, undo, R.drawable.ic_undo, R.string.tool_undo);
-            tool(toolPencil, pencil, pencilIcon, pencilTitle);
             tool(toolHint, hint, R.drawable.ic_hint, R.string.tool_hint);
             tool(toolPause, pause, pauseIcon, pauseTitle);
             return;
@@ -331,25 +321,13 @@ public class GameActivity extends Activity
         if (menu == null) return;
 
         enable(menu.findItem(R.id.menu_undo), undo);
-        enable(menu.findItem(R.id.menu_redo), canRedo(state));
         enable(menu.findItem(R.id.menu_hint), hint);
-
-        MenuItem pencilItem = menu.findItem(R.id.menu_pencil);
-        enable(pencilItem, pencil);
-        pencilItem.setIcon(pencilIcon);
-        pencilItem.setTitle(pencilTitle);
-        alpha(pencilItem, pencil);
 
         MenuItem pauseItem = menu.findItem(R.id.menu_pause);
         enable(pauseItem, pause);
         pauseItem.setIcon(pauseIcon);
         pauseItem.setTitle(pauseTitle);
         alpha(pauseItem, pause);
-    }
-
-    /** «Вернуть» живёт в двух местах: под «Ещё» в баре и под «Ещё» в полосе. Правило одно. */
-    private boolean canRedo(GameState state) {
-        return state.accepts() && state.history.canRedo();
     }
 
     private void tool(ImageButton button, boolean enabled, int icon, int description) {
@@ -381,11 +359,8 @@ public class GameActivity extends Activity
 
         Menu items = popup.getMenu();
         items.findItem(R.id.menu_undo).setVisible(false);
-        items.findItem(R.id.menu_pencil).setVisible(false);
         items.findItem(R.id.menu_hint).setVisible(false);
         items.findItem(R.id.menu_pause).setVisible(false);
-
-        items.findItem(R.id.menu_redo).setEnabled(canRedo(store.state()));
 
         popup.setOnMenuItemClickListener(this::onOptionsItemSelected);
         popup.show();
@@ -408,7 +383,7 @@ public class GameActivity extends Activity
         if (state.phase == GameState.Phase.LOST) {
             fillPanel(R.string.lost_title, getString(R.string.lost_text), null,
                     getString(R.string.try_again),
-                    v -> store.dispatch(new GameAction.NewGame(state.level, state.daily)), null);
+                    v -> store.dispatch(new GameAction.NewGame(state.level)), null);
             return;
         }
 
@@ -416,14 +391,14 @@ public class GameActivity extends Activity
                 getString(R.string.won_time, Labels.time(this, state.seconds)),
                 getResources().getQuantityString(
                         R.plurals.won_hints, state.hintsUsed, state.hintsUsed),
-                Labels.level(this, state.level, state.daily));
+                Labels.level(this, state.level));
         String note = state.record
                 ? getString(R.string.won_record)
                 : state.best != Stats.NO_TIME
                 ? getString(R.string.won_best, Labels.time(this, state.best))
                 : getString(R.string.won_no_best);
         fillPanel(R.string.won_title, summary, note, getString(R.string.new_game),
-                v -> store.dispatch(new GameAction.NewGame(state.level, state.daily)),
+                v -> store.dispatch(new GameAction.NewGame(state.level)),
                 v -> store.dispatch(new GameAction.PanelDismissed()));
     }
 
@@ -445,8 +420,7 @@ public class GameActivity extends Activity
     @Override
     public void handle(GameEffect effect) {
         if (effect instanceof GameEffect.Generate) {
-            GameEffect.Generate generate = (GameEffect.Generate) effect;
-            generate(generate.level, generate.daily);
+            generate(((GameEffect.Generate) effect).level);
         } else if (effect instanceof GameEffect.Respond) {
             responder.respond(board, ((GameEffect.Respond) effect).feedback);
         } else if (effect instanceof GameEffect.Animate) {
@@ -468,13 +442,11 @@ public class GameActivity extends Activity
      * занимают доли секунды, но это как раз тот размер, на котором главный поток начинает
      * подрагивать.
      */
-    private void generate(Difficulty level, boolean daily) {
+    private void generate(Difficulty level) {
         confetti.stop();
-        // Seed задачи дня — из номера дня: у всех в этот день она одна и та же.
-        int seed = daily ? today.seed() : random.nextInt();
-        Difficulty target = daily ? today.level() : level;
+        int seed = random.nextInt();
         Background.work(() -> {
-            Board made = Generator.board(target, new Rng(seed));
+            Board made = Generator.board(level, new Rng(seed));
             Background.main(() -> store.dispatch(new GameAction.Generated(made)));
         });
     }
@@ -487,7 +459,7 @@ public class GameActivity extends Activity
     private void recordWin(GameEffect.RecordWin win) {
         Background.work(() -> {
             Outcome outcome = statsStore.load()
-                    .afterWin(win.level, win.daily, win.seconds, win.hints, today);
+                    .afterWin(win.level, win.seconds, win.hints, today);
             statsStore.save(outcome.stats);
             Background.main(() -> store.dispatch(
                     new GameAction.WinRecorded(outcome.best, outcome.record)));
@@ -515,10 +487,6 @@ public class GameActivity extends Activity
         int id = item.getItemId();
         if (id == R.id.menu_undo) {
             store.dispatch(new GameAction.UndoTapped());
-        } else if (id == R.id.menu_redo) {
-            store.dispatch(new GameAction.RedoTapped());
-        } else if (id == R.id.menu_pencil) {
-            store.dispatch(new GameAction.PencilToggled());
         } else if (id == R.id.menu_hint) {
             store.dispatch(new GameAction.HintTapped());
         } else if (id == R.id.menu_pause) {
@@ -545,7 +513,6 @@ public class GameActivity extends Activity
         boolean losing = state.accepts() || state.phase == GameState.Phase.PAUSED;
         if (losing && state.history.isStarted()) {
             intent.putExtra(NewGameActivity.EXTRA_CURRENT_LEVEL, state.level.name());
-            intent.putExtra(NewGameActivity.EXTRA_CURRENT_DAILY, state.daily);
             intent.putExtra(NewGameActivity.EXTRA_CURRENT_SECONDS, state.seconds);
         }
         startActivityForResult(intent, NEW_GAME);
@@ -557,8 +524,7 @@ public class GameActivity extends Activity
         if (request != NEW_GAME || code != RESULT_OK || data == null) return;
         store.dispatch(new GameAction.NewGame(
                 Difficulty.byName(data.getStringExtra(NewGameActivity.EXTRA_LEVEL),
-                        Difficulty.MEDIUM),
-                data.getBooleanExtra(NewGameActivity.EXTRA_DAILY, false)));
+                        Difficulty.MEDIUM)));
     }
 
     /**

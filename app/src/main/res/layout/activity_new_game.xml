@@ -40,7 +40,5 @@
         <include android:id="@+id/level_hard" layout="@layout/item_level" />
 
         <include android:id="@+id/level_expert" layout="@layout/item_level" />
-
-        <include android:id="@+id/level_daily" layout="@layout/item_level" />
     </LinearLayout>
 </ScrollView>

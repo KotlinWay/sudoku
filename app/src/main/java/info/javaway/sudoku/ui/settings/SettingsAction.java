@@ -1,14 +1,18 @@
 package info.javaway.sudoku.ui.settings;
 
+import info.javaway.sudoku.settings.Theme;
+
 public abstract class SettingsAction {
 
     public static final class Loaded extends SettingsAction {
         public final boolean candidates;
         public final boolean sound;
+        public final Theme theme;
 
-        public Loaded(boolean candidates, boolean sound) {
+        public Loaded(boolean candidates, boolean sound, Theme theme) {
             this.candidates = candidates;
             this.sound = sound;
+            this.theme = theme;
         }
     }
 
@@ -24,6 +28,14 @@ public abstract class SettingsAction {
         public final boolean value;
 
         public SoundToggled(boolean value) {
+            this.value = value;
+        }
+    }
+
+    public static final class ThemePicked extends SettingsAction {
+        public final Theme value;
+
+        public ThemePicked(Theme value) {
             this.value = value;
         }
     }

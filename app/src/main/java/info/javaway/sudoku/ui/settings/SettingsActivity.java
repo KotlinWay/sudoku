@@ -1,8 +1,9 @@
 package info.javaway.sudoku.ui.settings;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,13 +13,15 @@ import info.javaway.sudoku.R;
 import info.javaway.sudoku.core.Background;
 import info.javaway.sudoku.settings.Links;
 import info.javaway.sudoku.settings.Prefs;
+import info.javaway.sudoku.settings.Theme;
+import info.javaway.sudoku.ui.ThemedActivity;
 import info.javaway.sudoku.ui.mvi.Store;
 
 /**
- * Настройки: два переключателя игры и связь с автором. Экран ничего не решает сам —
- * он показывает, что записано, и записывает то, что переключили.
+ * Настройки: три настройки и связь с автором. Экран ничего не решает сам — он показывает,
+ * что записано, и записывает то, что переключили.
  */
-public class SettingsActivity extends Activity
+public class SettingsActivity extends ThemedActivity
         implements Store.View<SettingsState>, Store.Effects<SettingsEffect> {
 
     private final Store<SettingsState, SettingsAction, SettingsEffect> store =
@@ -27,7 +30,10 @@ public class SettingsActivity extends Activity
     private Prefs prefs;
     private Switch candidates;
     private Switch sound;
-    private View rustore;
+    private RadioGroup theme;
+
+    /** Меню бара. Приходит позже первой отрисовки, поэтому проверяется на null. */
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,7 @@ public class SettingsActivity extends Activity
         prefs = new Prefs(this);
         candidates = findViewById(R.id.candidates);
         sound = findViewById(R.id.sound);
-        rustore = findViewById(R.id.link_rustore);
+        theme = findViewById(R.id.theme);
 
         bindViews();
         store.attach(this, this);
@@ -53,23 +59,41 @@ public class SettingsActivity extends Activity
     private void bindViews() {
         findViewById(R.id.raccoon).setOnClickListener(
                 v -> store.dispatch(new SettingsAction.LinkClicked(Links.RACCOON)));
-        findViewById(R.id.link_telegram).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.TELEGRAM)));
-        findViewById(R.id.link_max).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.MAX)));
-        findViewById(R.id.link_play).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.PLAY_DEVELOPER)));
-        rustore.setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.RUSTORE_DEVELOPER)));
-        findViewById(R.id.link_site).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.LinkClicked(Links.SITE)));
-        findViewById(R.id.link_rate).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.RateClicked()));
-        findViewById(R.id.link_write).setOnClickListener(
-                v -> store.dispatch(new SettingsAction.WriteClicked()));
 
         // Версия не состояние экрана: она не меняется, пока приложение не переустановят.
         ((TextView) findViewById(R.id.version)).setText(version());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings, menu);
+        this.menu = menu;
+        // Меню пришло после первой отрисовки: показать его тем же render, а не правкой мимо него.
+        render(store.state());
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.menu_telegram) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.TELEGRAM));
+        } else if (id == R.id.menu_max) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.MAX));
+        } else if (id == R.id.menu_play) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.PLAY_DEVELOPER));
+        } else if (id == R.id.menu_rustore) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.RUSTORE_DEVELOPER));
+        } else if (id == R.id.menu_site) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.SITE));
+        } else if (id == R.id.menu_rate) {
+            store.dispatch(new SettingsAction.RateClicked());
+        } else if (id == R.id.menu_write) {
+            store.dispatch(new SettingsAction.WriteClicked());
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
     @Override
@@ -78,8 +102,11 @@ public class SettingsActivity extends Activity
                 value -> store.dispatch(new SettingsAction.CandidatesToggled(value)));
         bind(sound, state.sound,
                 value -> store.dispatch(new SettingsAction.SoundToggled(value)));
+        bindTheme(state.theme);
         // Пункт без адреса — обманка: нажимать не на что, пока владелец не даст ссылку.
-        rustore.setVisibility(Links.RUSTORE_DEVELOPER.isEmpty() ? View.GONE : View.VISIBLE);
+        if (menu != null) {
+            menu.findItem(R.id.menu_rustore).setVisible(!Links.RUSTORE_DEVELOPER.isEmpty());
+        }
     }
 
     /**
@@ -92,6 +119,28 @@ public class SettingsActivity extends Activity
         view.setOnCheckedChangeListener((button, checked) -> toggle.onToggle(checked));
     }
 
+    /** То же самое для выбора темы: сначала отметить нужный кружок, потом слушать. */
+    private void bindTheme(Theme value) {
+        theme.setOnCheckedChangeListener(null);
+        theme.check(buttonOf(value));
+        theme.setOnCheckedChangeListener(
+                (group, id) -> store.dispatch(new SettingsAction.ThemePicked(themeOf(id))));
+    }
+
+    private static int buttonOf(Theme value) {
+        switch (value) {
+            case LIGHT: return R.id.theme_light;
+            case DARK: return R.id.theme_dark;
+            default: return R.id.theme_system;
+        }
+    }
+
+    private static Theme themeOf(int id) {
+        if (id == R.id.theme_light) return Theme.LIGHT;
+        if (id == R.id.theme_dark) return Theme.DARK;
+        return Theme.SYSTEM;
+    }
+
     private interface Toggle {
         void onToggle(boolean value);
     }
@@ -102,8 +151,9 @@ public class SettingsActivity extends Activity
             Background.work(() -> {
                 boolean showCandidates = prefs.candidates();
                 boolean playSound = prefs.sound();
+                Theme value = prefs.theme();
                 Background.main(() -> store.dispatch(
-                        new SettingsAction.Loaded(showCandidates, playSound)));
+                        new SettingsAction.Loaded(showCandidates, playSound, value)));
             });
         } else if (effect instanceof SettingsEffect.SaveCandidates) {
             boolean value = ((SettingsEffect.SaveCandidates) effect).value;
@@ -111,6 +161,12 @@ public class SettingsActivity extends Activity
         } else if (effect instanceof SettingsEffect.SaveSound) {
             boolean value = ((SettingsEffect.SaveSound) effect).value;
             Background.work(() -> prefs.setSound(value));
+        } else if (effect instanceof SettingsEffect.SaveTheme) {
+            // Единственная настройка, которую пишем на главном потоке: сразу за записью экран
+            // пересобирается и читает её заново — фоновая запись могла бы к тому моменту
+            // не случиться, и человек увидел бы прежние цвета.
+            prefs.setTheme(((SettingsEffect.SaveTheme) effect).value);
+            restart();
         } else if (effect instanceof SettingsEffect.OpenLink) {
             if (!Links.open(this, ((SettingsEffect.OpenLink) effect).url)) failed();
         } else if (effect instanceof SettingsEffect.Rate) {

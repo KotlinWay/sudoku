@@ -20,11 +20,9 @@ public abstract class GameEffect {
 
     public static final class Generate extends GameEffect {
         public final Difficulty level;
-        public final boolean daily;
 
-        public Generate(Difficulty level, boolean daily) {
+        public Generate(Difficulty level) {
             this.level = level;
-            this.daily = daily;
         }
     }
 
@@ -59,13 +57,11 @@ public abstract class GameEffect {
 
     public static final class RecordWin extends GameEffect {
         public final Difficulty level;
-        public final boolean daily;
         public final int seconds;
         public final int hints;
 
-        public RecordWin(Difficulty level, boolean daily, int seconds, int hints) {
+        public RecordWin(Difficulty level, int seconds, int hints) {
             this.level = level;
-            this.daily = daily;
             this.seconds = seconds;
             this.hints = hints;
         }

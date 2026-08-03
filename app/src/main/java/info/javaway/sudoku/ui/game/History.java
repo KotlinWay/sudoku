@@ -7,40 +7,33 @@ import java.util.List;
 import info.javaway.sudoku.game.Move;
 
 /**
- * Сделанное и отменённое. Иммутабельна, как и всё состояние экрана: каждый ход рождает новую
+ * Сделанные ходы. Иммутабельна, как и всё состояние экрана: каждый ход рождает новую
  * историю, а не правит прежнюю.
  *
- * Новый ход стирает отменённое. Иначе «повторить» вернуло бы ход из ветки, от которой игрок
- * уже отказался, и на доске появилась бы цифра, которую он не ставил.
+ * Стек один. Отменённый ход никуда не откладывается: «вернуть» из игры убрано, а держать
+ * ветку, войти в которую нечем, значит таскать по состоянию и писать на диск список,
+ * который никто не прочтёт.
  */
 public final class History {
 
-    private static final History EMPTY =
-            new History(Collections.<Move>emptyList(), Collections.<Move>emptyList());
+    private static final History EMPTY = new History(Collections.<Move>emptyList());
 
     private final List<Move> done;
-    private final List<Move> undone;
 
-    private History(List<Move> done, List<Move> undone) {
+    private History(List<Move> done) {
         this.done = done;
-        this.undone = undone;
     }
 
     public static History empty() {
         return EMPTY;
     }
 
-    public static History of(List<Move> done, List<Move> undone) {
-        return new History(Collections.unmodifiableList(new ArrayList<>(done)),
-                Collections.unmodifiableList(new ArrayList<>(undone)));
+    public static History of(List<Move> done) {
+        return new History(Collections.unmodifiableList(new ArrayList<>(done)));
     }
 
     public boolean canUndo() {
         return !done.isEmpty();
-    }
-
-    public boolean canRedo() {
-        return !undone.isEmpty();
     }
 
     /** Ходов сделано хотя бы один — значит партия начата, и стирать её молча нельзя. */
@@ -52,28 +45,17 @@ public final class History {
         return done.get(done.size() - 1);
     }
 
-    public Move lastUndone() {
-        return undone.get(undone.size() - 1);
-    }
-
     public List<Move> done() {
         return done;
     }
 
-    public List<Move> undone() {
-        return undone;
-    }
-
     public History pushed(Move move) {
-        return new History(appended(done, move), Collections.<Move>emptyList());
+        return new History(appended(done, move));
     }
 
-    public History undone(Move move) {
-        return new History(withoutLast(done), appended(undone, move));
-    }
-
-    public History redone(Move move) {
-        return new History(appended(done, move), withoutLast(undone));
+    /** Верхний ход снят. Куда он делся, история не помнит: возвращать его больше некуда. */
+    public History popped() {
+        return new History(withoutLast(done));
     }
 
     private static List<Move> appended(List<Move> moves, Move move) {

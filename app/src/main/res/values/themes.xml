@@ -8,6 +8,10 @@
         <item name="android:textColorSecondary">@color/muted</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Overflow</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu</item>
+        <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="android:alertDialogTheme">@style/AlertDialog</item>
         <item name="android:statusBarColor">@color/accent_dark</item>
         <!--
             Линия под баром задана темой, а не разметками: система рисует windowContentOverlay
@@ -30,6 +34,52 @@
 
     <style name="ActionBarTitle" parent="@android:style/TextAppearance.DeviceDefault.Widget.ActionBar.Title">
         <item name="android:textColor">@color/on_accent</item>
+    </style>
+
+    <!--
+        Три точки в баре. Свой значок, а не платформенный: платформенный красится
+        textColorPrimary, то есть цветом надписей на фоне страницы, а стоит он на жёлтом
+        баре. В светлой теме это сходило с рук — там textColorPrimary почти чёрный и
+        совпадал с нашими значками; в тёмной он стал светло-серым, и точки побелели
+        на золоте: контраст 1,6:1 при нормативе 3:1 для нетекстовых элементов.
+
+        Значок берётся тот же, что и у полосы инструментов в альбоме, — так три точки
+        в двух ориентациях остаются одной и той же кнопкой, а не двумя похожими.
+    -->
+    <style name="Overflow" parent="@android:style/Widget.DeviceDefault.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_more</item>
+        <item name="android:tint">@color/on_accent</item>
+    </style>
+
+    <!--
+        Список под тремя точками. Платформенный фон в тёмной теме синевато-серый (#3C4043),
+        и рядом с угольной поверхностью приложения (#252525) он читается заплаткой из
+        чужого приложения. Фон взят наш — тот же, что у плиток и клавиш.
+
+        Стиль один на оба списка: в портрете его открывает бар, в альбоме — PopupMenu
+        из полосы инструментов, и оба берут popupMenuStyle из темы.
+    -->
+    <style name="PopupMenu" parent="@android:style/Widget.DeviceDefault.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_tile</item>
+    </style>
+
+    <!--
+        Список бара — не тот же виджет, что PopupMenu: он берёт actionOverflowMenuStyle,
+        а popupMenuStyle не читает вовсе. Проверено заменой одного и снимком экрана,
+        на котором ничего не поменялось. Поэтому стилей два, а фон в них один.
+    -->
+    <style name="OverflowMenu" parent="@android:style/Widget.DeviceDefault.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_tile</item>
+    </style>
+
+    <!--
+        Окна статистики и подтверждения сброса. Диалог берёт свою тему из alertDialogTheme,
+        а не из темы экрана, поэтому наш акцент до его кнопок не доходил и они оставались
+        платформенно-синими среди жёлтого приложения. Предок — DayNight-вариант: без него
+        диалог остался бы тёмным в светлой теме.
+    -->
+    <style name="AlertDialog" parent="@android:style/Theme.DeviceDefault.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/dialog_accent</item>
     </style>
 
     <!--
@@ -72,6 +122,37 @@
     <style name="Text.Caption">
         <item name="android:textSize">@dimen/text_caption</item>
         <item name="android:textColor">@color/muted</item>
+    </style>
+
+    <!--
+        Заголовок раздела настроек. Отличается от подписи начертанием, а не размером и не
+        цветом: раздела всего три, и лишний оттенок на экране ради них заводить незачем.
+    -->
+    <style name="Text.Section">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/muted</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginBottom">@dimen/space_s</item>
+    </style>
+
+    <!-- Черта между разделами настроек. Отступы её же: разделяет она, ей и держать воздух. -->
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">@dimen/space_xl</item>
+        <item name="android:layout_marginBottom">@dimen/space_xl</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
+    <!-- Строка выбора из нескольких. Кружок красится акцентом, подпись — цветом текста. -->
+    <style name="Choice" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">@dimen/touch_target</item>
+        <item name="android:buttonTint">@color/accent</item>
+        <item name="android:textColor">@color/on_background</item>
+        <item name="android:textSize">@dimen/text_body</item>
     </style>
 
     <!--

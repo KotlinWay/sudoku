@@ -5,28 +5,28 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * Один шаг истории — разница между доской до и доской после.
+ * Один шаг истории — снимок клеток, которых ход коснулся, каким они были до него.
  *
  * Ход не описывает сам себя («вписал 5», «стёр», «взял подсказку»): он вычисляется сравнением
  * двух досок. Поэтому отмена работает одинаково для любого действия, включая то, которое
  * задело чужие клетки — например вписанная цифра стирает свои пометки у всех соседей.
  * Заводить на каждый вид хода свою запись и свой обратный код не понадобилось.
+ *
+ * Состояние «после» ход не хранит: его применял только «вернуть», а его в игре больше нет.
+ * Понадобится вернуть — сюда придётся дописать вторую половину снимка и вторую половину
+ * формата сохранения; одной отмене она не нужна.
  */
 public final class Move {
 
+    /** Клетки, которые ход изменил, и что в них стояло до него. */
     private final int[] cells;
-    private final int[] valuesBefore;
-    private final int[] valuesAfter;
-    private final int[] notesBefore;
-    private final int[] notesAfter;
+    private final int[] values;
+    private final int[] notes;
 
-    private Move(int[] cells, int[] valuesBefore, int[] valuesAfter,
-                 int[] notesBefore, int[] notesAfter) {
+    private Move(int[] cells, int[] values, int[] notes) {
         this.cells = cells;
-        this.valuesBefore = valuesBefore;
-        this.valuesAfter = valuesAfter;
-        this.notesBefore = notesBefore;
-        this.notesAfter = notesAfter;
+        this.values = values;
+        this.notes = notes;
     }
 
     /** @return разница двух досок или null, если действие ничего не изменило */
@@ -38,34 +38,26 @@ public final class Move {
         if (changed == 0) return null;
 
         int[] cells = new int[changed];
-        int[] valuesBefore = new int[changed];
-        int[] valuesAfter = new int[changed];
-        int[] notesBefore = new int[changed];
-        int[] notesAfter = new int[changed];
+        int[] values = new int[changed];
+        int[] notes = new int[changed];
         int i = 0;
         for (int cell = 0; cell < Cells.COUNT; cell++) {
             if (!differs(before, after, cell)) continue;
             cells[i] = cell;
-            valuesBefore[i] = before.value(cell);
-            valuesAfter[i] = after.value(cell);
-            notesBefore[i] = before.notes(cell);
-            notesAfter[i] = after.notes(cell);
+            values[i] = before.value(cell);
+            notes[i] = before.notes(cell);
             i++;
         }
-        return new Move(cells, valuesBefore, valuesAfter, notesBefore, notesAfter);
+        return new Move(cells, values, notes);
     }
 
-    /** Клетка, вокруг которой ход случился: к ней возвращается выделение при отмене и повторе. */
+    /** Клетка, вокруг которой ход случился: к ней возвращается выделение при отмене. */
     public int cell() {
         return cells[0];
     }
 
     public Board undo(Board board) {
-        return board.with(cells, valuesBefore, notesBefore);
-    }
-
-    public Board redo(Board board) {
-        return board.with(cells, valuesAfter, notesAfter);
+        return board.with(cells, values, notes);
     }
 
     private static boolean differs(Board before, Board after, int cell) {
@@ -74,7 +66,7 @@ public final class Move {
     }
 
     /*
-     * Запись и чтение — здесь, а не в хранилище: иначе пять внутренних массивов пришлось бы
+     * Запись и чтение — здесь, а не в хранилище: иначе три внутренних массива пришлось бы
      * выставить наружу геттерами, и любой желающий смог бы собрать ход, который не является
      * разницей никаких двух досок.
      */
@@ -83,10 +75,8 @@ public final class Move {
         out.writeInt(cells.length);
         for (int i = 0; i < cells.length; i++) {
             out.writeInt(cells[i]);
-            out.writeInt(valuesBefore[i]);
-            out.writeInt(valuesAfter[i]);
-            out.writeInt(notesBefore[i]);
-            out.writeInt(notesAfter[i]);
+            out.writeInt(values[i]);
+            out.writeInt(notes[i]);
         }
     }
 
@@ -95,18 +85,14 @@ public final class Move {
         // Сохранение испорчено: дальше читать нечего, партия начнётся заново.
         if (size <= 0 || size > Cells.COUNT) throw new IOException();
         int[] cells = new int[size];
-        int[] valuesBefore = new int[size];
-        int[] valuesAfter = new int[size];
-        int[] notesBefore = new int[size];
-        int[] notesAfter = new int[size];
+        int[] values = new int[size];
+        int[] notes = new int[size];
         for (int i = 0; i < size; i++) {
             cells[i] = in.readInt();
-            valuesBefore[i] = in.readInt();
-            valuesAfter[i] = in.readInt();
-            notesBefore[i] = in.readInt();
-            notesAfter[i] = in.readInt();
+            values[i] = in.readInt();
+            notes[i] = in.readInt();
             if (cells[i] < 0 || cells[i] >= Cells.COUNT) throw new IOException();
         }
-        return new Move(cells, valuesBefore, valuesAfter, notesBefore, notesAfter);
+        return new Move(cells, values, notes);
     }
 }

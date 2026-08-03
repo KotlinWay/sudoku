@@ -14,11 +14,11 @@ public class NewGameReducerTest {
     private static final NewGameReducer REDUCER = new NewGameReducer();
 
     private static NewGameState screen() {
-        return NewGameState.of(666, Difficulty.HARD, null, false, 0);
+        return NewGameState.of(null, 0);
     }
 
     private static NewGameState screenOver(Difficulty level, int seconds) {
-        return NewGameState.of(666, Difficulty.HARD, level, false, seconds);
+        return NewGameState.of(level, seconds);
     }
 
     private static NewGameEffect.Start start(Update<NewGameState, NewGameEffect> update) {
@@ -42,36 +42,18 @@ public class NewGameReducerTest {
 
     @Test public void выборУровняЗапускаетЕгоЖе() {
         Update<NewGameState, NewGameEffect> update =
-                REDUCER.reduce(screen(), new NewGameAction.LevelPicked(Difficulty.EXPERT, false));
+                REDUCER.reduce(screen(), new NewGameAction.LevelPicked(Difficulty.EXPERT));
 
-        NewGameEffect.Start start = start(update);
-        assertEquals(Difficulty.EXPERT, start.level);
-        assertFalse(start.daily);
+        assertEquals(Difficulty.EXPERT, start(update).level);
     }
 
-    /** Уровень задачи дня назначает дата: что бы ни пришло из интерфейса, идёт сегодняшний. */
-    @Test public void задачаДняИдётСоСвоимУровнем() {
-        Update<NewGameState, NewGameEffect> update =
-                REDUCER.reduce(screen(), new NewGameAction.LevelPicked(null, true));
+    /** Выбор ничего не меняет на экране: он закрывает его, а не перерисовывает. */
+    @Test public void выборНеТрогаетСостояниеЭкрана() {
+        NewGameState before = screenOver(Difficulty.EASY, 192);
 
-        NewGameEffect.Start start = start(update);
-        assertEquals(Difficulty.HARD, start.level);
-        assertTrue(start.daily);
-    }
+        NewGameState after =
+                REDUCER.reduce(before, new NewGameAction.LevelPicked(Difficulty.EXPERT)).state;
 
-    @Test public void отметкаОРешённойЗадачеДняПриходитОтдельно() {
-        NewGameState state = screen();
-
-        assertFalse(state.dailySolved);
-        assertTrue(REDUCER.reduce(state, new NewGameAction.Loaded(true)).state.dailySolved);
-    }
-
-    @Test public void отметкаНеТрогаетОстальноеСостояние() {
-        NewGameState after = REDUCER.reduce(screenOver(Difficulty.EASY, 192),
-                new NewGameAction.Loaded(true)).state;
-
-        assertEquals(666, after.dailyNumber);
-        assertEquals(Difficulty.HARD, after.dailyLevel);
         assertEquals(Difficulty.EASY, after.currentLevel);
         assertEquals(192, after.currentSeconds);
     }

@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Настройки. На экране только то, что настраивают: разделы «Игра» и «Оформление».
+    Связь с автором ушла под три точки бара (res/menu/settings.xml): семь ссылок подряд
+    занимали больше места, чем сами настройки, а открывают их раз в жизни.
+
+    Блок про Блокнот Енот стоит последним намеренно: это не настройка, а рассказ о другом
+    приложении, и человек, пришедший сюда включить звук, не должен об него спотыкаться.
+-->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,6 +19,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="@dimen/space_xl">
+
+        <!-- ── Игра ─────────────────────────────────────────────────────── -->
+
+        <TextView
+            style="@style/Text.Section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_game" />
 
         <Switch
             android:id="@+id/candidates"
@@ -45,7 +61,60 @@
             android:layout_height="wrap_content"
             android:text="@string/sound_hint" />
 
-        <!-- Блокнот Енот -->
+        <!-- ── Оформление ───────────────────────────────────────────────── -->
+
+        <View style="@style/Divider" />
+
+        <TextView
+            style="@style/Text.Section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_theme" />
+
+        <!--
+            Три возможности переключателем не показать: «как в системе» — это не «выключено».
+            Радиокнопки говорят прямо, что выбор один из трёх и что он сделан.
+        -->
+        <RadioGroup
+            android:id="@+id/theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/theme_system"
+                style="@style/Choice"
+                android:text="@string/theme_system" />
+
+            <RadioButton
+                android:id="@+id/theme_light"
+                style="@style/Choice"
+                android:text="@string/theme_light" />
+
+            <RadioButton
+                android:id="@+id/theme_dark"
+                style="@style/Choice"
+                android:text="@string/theme_dark" />
+        </RadioGroup>
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/theme_hint" />
+
+        <!-- ── Подвал ───────────────────────────────────────────────────── -->
+
+        <View style="@style/Divider" />
+
+        <TextView
+            android:id="@+id/version"
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- ── Блокнот Енот ─────────────────────────────────────────────── -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,86 +144,5 @@
                 android:layout_marginTop="@dimen/space_l"
                 android:text="@string/raccoon_button" />
         </LinearLayout>
-
-        <!--
-            Ссылки. Каждому пункту обязателен minHeight в тач-таргет: строка текста сама
-            по себе выходит высотой около 20dp, и попасть в неё пальцем невозможно.
-        -->
-        <TextView
-            style="@style/Text.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_xl"
-            android:text="@string/links_section" />
-
-        <TextView
-            android:id="@+id/link_telegram"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_telegram" />
-
-        <TextView
-            android:id="@+id/link_max"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_max" />
-
-        <TextView
-            android:id="@+id/link_play"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_play" />
-
-        <TextView
-            android:id="@+id/link_rustore"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_rustore" />
-
-        <TextView
-            android:id="@+id/link_site"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_site" />
-
-        <TextView
-            android:id="@+id/link_rate"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_rate" />
-
-        <TextView
-            android:id="@+id/link_write"
-            style="@style/Text.Body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:minHeight="@dimen/touch_target"
-            android:text="@string/link_write" />
-
-        <TextView
-            android:id="@+id/version"
-            style="@style/Text.Caption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_l" />
     </LinearLayout>
 </ScrollView>

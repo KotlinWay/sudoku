@@ -33,7 +33,7 @@ public class GameReducerTest {
     }
 
     private static GameState playing(Difficulty level, int... empty) {
-        return GameState.generating(level, false, false)
+        return GameState.generating(level, false)
                 .started(Boards.withEmpty(empty))
                 .selecting(empty[0]);
     }
@@ -205,7 +205,7 @@ public class GameReducerTest {
         assertEquals(GameState.Phase.WON, after.phase);
     }
 
-    /* ── Отмена и повтор ──────────────────────────────────────────────────── */
+    /* ── Отмена ───────────────────────────────────────────────────────────── */
 
     @Test public void отменаУбираетПоследнийХод() {
         GameState state = reduce(playing(), new GameAction.DigitTapped(3));
@@ -214,16 +214,6 @@ public class GameReducerTest {
 
         assertEquals(0, after.board.value(CELL));
         assertFalse(after.history.canUndo());
-        assertTrue(after.history.canRedo());
-    }
-
-    @Test public void повторВозвращаетОтменённое() {
-        GameState state = reduce(reduce(playing(),
-                new GameAction.DigitTapped(3)), new GameAction.UndoTapped());
-
-        GameState after = reduce(state, new GameAction.RedoTapped());
-
-        assertEquals(3, after.board.value(CELL));
     }
 
     @Test public void отменаБезИсторииНичегоНеЛомает() {
@@ -232,13 +222,16 @@ public class GameReducerTest {
         assertEquals(state, reduce(state, new GameAction.UndoTapped()));
     }
 
-    @Test public void новыйХодСтираетОтменённое() {
-        GameState state = reduce(reduce(playing(),
-                new GameAction.DigitTapped(3)), new GameAction.UndoTapped());
+    /** Отмена идёт вглубь по одному ходу, а не разом до чистой доски. */
+    @Test public void отменаСнимаетХодыПоОдному() {
+        GameState state = reduce(reduce(playing(), new GameAction.DigitTapped(3))
+                .selecting(OTHER), new GameAction.DigitTapped(4));
 
-        GameState after = reduce(state, new GameAction.DigitTapped(4));
+        GameState after = reduce(state, new GameAction.UndoTapped());
 
-        assertFalse(after.history.canRedo());
+        assertEquals(0, after.board.value(OTHER));
+        assertEquals(3, after.board.value(CELL));
+        assertTrue(after.history.canUndo());
     }
 
     @Test public void отменаВозвращаетВыделениеНаКлеткуХода() {
@@ -346,7 +339,7 @@ public class GameReducerTest {
     }
 
     @Test public void часыНеИдутПокаСоставляетсяЗадача() {
-        GameState generating = GameState.generating(Difficulty.EASY, false, false);
+        GameState generating = GameState.generating(Difficulty.EASY, false);
 
         assertEquals(0, reduce(generating, new GameAction.Ticked()).seconds);
     }
@@ -355,12 +348,11 @@ public class GameReducerTest {
 
     @Test public void новаяПартияПроситСоставитьЗадачуВыбранногоУровня() {
         Update<GameState, GameEffect> update =
-                REDUCER.reduce(playing(), new GameAction.NewGame(Difficulty.HARD, false));
+                REDUCER.reduce(playing(), new GameAction.NewGame(Difficulty.HARD));
 
         GameEffect.Generate generate = effect(update, GameEffect.Generate.class);
         assertNotNull(generate);
         assertEquals(Difficulty.HARD, generate.level);
-        assertFalse(generate.daily);
         assertEquals(Difficulty.HARD, update.state.level);
         assertEquals(GameState.Phase.GENERATING, update.state.phase);
     }
@@ -371,7 +363,7 @@ public class GameReducerTest {
                 Boards.wrongAnswer(CELL))), new GameAction.Ticked());
 
         Update<GameState, GameEffect> update = REDUCER.reduce(started,
-                new GameAction.NewGame(Difficulty.HARD, false));
+                new GameAction.NewGame(Difficulty.HARD));
 
         assertEquals(0, update.state.seconds);
         assertEquals(0, update.state.mistakes);
@@ -386,22 +378,14 @@ public class GameReducerTest {
                 new GameAction.DigitTapped(Boards.answer(CELL)));
 
         Update<GameState, GameEffect> update =
-                REDUCER.reduce(won, new GameAction.NewGame(Difficulty.EASY, false));
+                REDUCER.reduce(won, new GameAction.NewGame(Difficulty.EASY));
 
         assertNotNull(effect(update, GameEffect.Generate.class));
         assertEquals(GameState.Phase.GENERATING, update.state.phase);
     }
 
-    @Test public void задачаДняОстаётсяЗадачейДня() {
-        Update<GameState, GameEffect> update =
-                REDUCER.reduce(playing(), new GameAction.NewGame(Difficulty.MEDIUM, true));
-
-        assertTrue(update.state.daily);
-        assertTrue(effect(update, GameEffect.Generate.class).daily);
-    }
-
     @Test public void готоваяДоскаЗаменяетЗаглушку() {
-        GameState generating = GameState.generating(Difficulty.HARD, false, false);
+        GameState generating = GameState.generating(Difficulty.HARD, false);
         Board board = Boards.withEmpty(CELL);
 
         GameState after = reduce(generating, new GameAction.Generated(board));
@@ -430,7 +414,7 @@ public class GameReducerTest {
     @Test public void настройкаКандидатовПереживаетНовуюПартию() {
         GameState state = reduce(playing(), new GameAction.CandidatesChanged(true));
 
-        GameState after = reduce(state, new GameAction.NewGame(Difficulty.HARD, false));
+        GameState after = reduce(state, new GameAction.NewGame(Difficulty.HARD));
 
         assertTrue(after.candidates);
     }
@@ -449,7 +433,7 @@ public class GameReducerTest {
     }
 
     @Test public void покаЗадачаСоставляетсяКлеткиНеВыбираются() {
-        GameState generating = GameState.generating(Difficulty.EASY, false, false);
+        GameState generating = GameState.generating(Difficulty.EASY, false);
 
         assertEquals(-1, reduce(generating, new GameAction.CellTapped(CELL)).selected);
     }

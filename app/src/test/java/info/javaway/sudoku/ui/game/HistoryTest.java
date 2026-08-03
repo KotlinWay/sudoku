@@ -23,7 +23,6 @@ public class HistoryTest {
 
     @Test public void пустаяИсторияНичегоНеУмеет() {
         assertFalse(History.empty().canUndo());
-        assertFalse(History.empty().canRedo());
         assertFalse(History.empty().isStarted());
     }
 
@@ -34,33 +33,22 @@ public class HistoryTest {
         assertTrue(history.isStarted());
     }
 
-    @Test public void отменённыйХодУходитВПовтор() {
+    @Test public void снятыйХодИсчезаетБезСледа() {
         History history = History.empty().pushed(move(1));
 
-        History after = history.undone(history.lastDone());
+        History after = history.popped();
 
         assertFalse(after.canUndo());
-        assertTrue(after.canRedo());
+        assertEquals(0, after.done().size());
     }
 
-    @Test public void повторённыйХодВозвращаетсяВСделанные() {
-        History history = History.empty().pushed(move(1));
-        History undone = history.undone(history.lastDone());
+    @Test public void снимаетсяТолькоВерхнийХод() {
+        History history = History.empty().pushed(move(1)).pushed(move(2));
 
-        History after = undone.redone(undone.lastUndone());
+        History after = history.popped();
 
+        assertEquals(1, after.done().size());
         assertTrue(after.canUndo());
-        assertFalse(after.canRedo());
-    }
-
-    /** Иначе «повторить» вернуло бы ход из ветки, от которой игрок уже отказался. */
-    @Test public void новыйХодСтираетОтменённое() {
-        History history = History.empty().pushed(move(1));
-        History undone = history.undone(history.lastDone());
-
-        History after = undone.pushed(move(2));
-
-        assertFalse(after.canRedo());
     }
 
     @Test public void историяНеМеняетсяНаМесте() {
@@ -73,13 +61,10 @@ public class HistoryTest {
 
     @Test public void сохранённуюИсториюМожноСобратьОбратно() {
         History history = History.empty().pushed(move(1)).pushed(move(2));
-        History undone = history.undone(history.lastDone());
 
-        History restored = History.of(undone.done(), undone.undone());
+        History restored = History.of(history.done());
 
-        assertEquals(1, restored.done().size());
-        assertEquals(1, restored.undone().size());
+        assertEquals(2, restored.done().size());
         assertTrue(restored.canUndo());
-        assertTrue(restored.canRedo());
     }
 }

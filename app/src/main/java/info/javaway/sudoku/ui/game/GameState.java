@@ -29,7 +29,6 @@ public final class GameState {
 
     public final Phase phase;
     public final Difficulty level;
-    public final boolean daily;
     public final Board board;
     public final History history;
 
@@ -57,7 +56,6 @@ public final class GameState {
     private GameState(Draft draft) {
         this.phase = draft.phase;
         this.level = draft.level;
-        this.daily = draft.daily;
         this.board = draft.board;
         this.history = draft.history;
         this.selected = draft.selected;
@@ -73,11 +71,10 @@ public final class GameState {
     }
 
     /** Состояние на время работы генератора: уровень уже выбран, доски ещё нет. */
-    public static GameState generating(Difficulty level, boolean daily, boolean candidates) {
+    public static GameState generating(Difficulty level, boolean candidates) {
         Draft draft = new Draft();
         draft.phase = Phase.GENERATING;
         draft.level = level;
-        draft.daily = daily;
         draft.board = Board.blank();
         draft.history = History.empty();
         draft.selected = -1;
@@ -131,18 +128,11 @@ public final class GameState {
         return new GameState(draft);
     }
 
+    /** Ход отменён. Выделение встаёт на клетку хода: человек смотрит именно туда. */
     public GameState undone(Board board, Move move) {
         Draft draft = edit();
         draft.board = board;
-        draft.history = history.undone(move);
-        draft.selected = move.cell();
-        return new GameState(draft);
-    }
-
-    public GameState redone(Board board, Move move) {
-        Draft draft = edit();
-        draft.board = board;
-        draft.history = history.redone(move);
+        draft.history = history.popped();
         draft.selected = move.cell();
         return new GameState(draft);
     }
@@ -168,7 +158,8 @@ public final class GameState {
 
     /**
      * Автоподсказка кандидатов и карандаш — взаимоисключающие: когда цифры расставляет
-     * программа, писать поверх них свои нечего, и кнопка карандаша гаснет.
+     * программа, писать поверх них свои нечего, и карандаш выключается. Кнопки карандаша
+     * сейчас нет ни в баре, ни в полосе, но правило живёт здесь, а не в ней.
      */
     public GameState candidates(boolean on) {
         Draft draft = edit();
@@ -216,7 +207,6 @@ public final class GameState {
         Draft draft = new Draft();
         draft.phase = phase;
         draft.level = level;
-        draft.daily = daily;
         draft.board = board;
         draft.history = history;
         draft.selected = selected;
@@ -236,7 +226,6 @@ public final class GameState {
     static final class Draft {
         Phase phase;
         Difficulty level;
-        boolean daily;
         Board board;
         History history;
         int selected;

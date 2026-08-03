@@ -33,16 +33,6 @@ public class MoveTest {
         assertEquals(0, undone.value(CELL));
     }
 
-    @Test public void повторВозвращаетХодОбратно() {
-        Board before = Boards.withEmpty(CELL);
-        Board after = Rules.place(before, CELL, 7);
-        Move move = Move.between(before, after);
-
-        Board redone = move.redo(move.undo(after));
-
-        assertEquals(7, redone.value(CELL));
-    }
-
     /**
      * Главное, ради чего ход считается разницей досок: вписанная цифра трогает пометки
      * у двадцати соседей, и отмена обязана вернуть все двадцать.

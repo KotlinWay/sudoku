@@ -16,7 +16,6 @@ public final class StatsStore {
     private static final String BEST_STREAK = "best_streak";
     private static final String LAST_WIN_DAY = "last_win_day";
     private static final String HINTS_USED = "hints_used";
-    private static final String DAILY_SOLVED_DAY = "daily_solved_day";
     private static final String BEST = "best_";
 
     private final SharedPreferences preferences;
@@ -37,7 +36,6 @@ public final class StatsStore {
                 preferences.getInt(BEST_STREAK, 0),
                 preferences.getInt(LAST_WIN_DAY, Day.NEVER),
                 preferences.getInt(HINTS_USED, 0),
-                preferences.getInt(DAILY_SOLVED_DAY, Day.NEVER),
                 best);
     }
 
@@ -48,8 +46,7 @@ public final class StatsStore {
                 .putInt(STREAK, stats.streak)
                 .putInt(BEST_STREAK, stats.bestStreak)
                 .putInt(LAST_WIN_DAY, stats.lastWinDay)
-                .putInt(HINTS_USED, stats.hintsUsed)
-                .putInt(DAILY_SOLVED_DAY, stats.dailySolvedDay);
+                .putInt(HINTS_USED, stats.hintsUsed);
         int[] best = stats.bestTimes();
         for (int slot = 0; slot < best.length; slot++) {
             editor.putInt(BEST + slot, best[slot]);

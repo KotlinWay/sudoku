@@ -12,11 +12,9 @@ public abstract class GameAction {
      */
     public static final class NewGame extends GameAction {
         public final Difficulty level;
-        public final boolean daily;
 
-        public NewGame(Difficulty level, boolean daily) {
+        public NewGame(Difficulty level) {
             this.level = level;
-            this.daily = daily;
         }
     }
 
@@ -51,9 +49,6 @@ public abstract class GameAction {
     }
 
     public static final class UndoTapped extends GameAction {
-    }
-
-    public static final class RedoTapped extends GameAction {
     }
 
     public static final class HintTapped extends GameAction {

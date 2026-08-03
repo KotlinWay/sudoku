@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Ночью здесь переопределяется ровно один стиль, и только ради предка.
+
+    У системного диалога DayNight-варианта в платформе нет: есть
+    `Theme.DeviceDefault.Light.Dialog.Alert` и тёмный `Theme.DeviceDefault.Dialog.Alert`,
+    а `Theme.DeviceDefault.DayNight.Dialog.Alert` не существует — линковка на нём падает.
+    Предка нельзя задать `item`-ом, поэтому развести день и ночь можно только двумя
+    объявлениями стиля под разными квалификаторами.
+
+    Всё остальное оформление живёт в одном `values/themes.xml` и меняется цветами:
+    заводить здесь копию темы значит завести вторую правду о ней.
+-->
+<resources>
+    <style name="AlertDialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
+        <item name="android:colorAccent">@color/dialog_accent</item>
+    </style>
+</resources>

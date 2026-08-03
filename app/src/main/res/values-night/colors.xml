@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Тёмная тема. Те же три решения, что и в светлой, плюс четвёртое: фон не чёрный.
-    Чистый #000000 под белыми цифрами даёт максимальный возможный контраст, от которого
-    в темноте цифры «звенят» и остаётся след на сетчатке. Синевато-серый фон семейства
+    Тёмная тема — «ночное золото», палитра Блокнота Енота и сайта javaway.info: угольный фон
+    и золото вместо жёлтого. Три решения светлой темы остаются в силе, плюс четвёртое:
+    фон не чёрный. Чистый #000000 под белыми цифрами даёт максимальный возможный контраст,
+    от которого в темноте цифры «звенят» и оставляют след на сетчатке; угольный #1A1A1A
     убирает этот эффект и не мешает читать.
 
-    Жёлтый акцент в тёмной теме не меняется: это знак семейства приложений.
+    Акцент здесь свой, а не общий со светлой темой: жёлтый #FFD33E на угольном фоне светит
+    как фара — на баре во всю ширину это больно. Приглушённое золото #D4AF37 узнаётся тем же
+    цветом семейства, но не слепит.
+
+    Цифра игрока остаётся синей, а не золотой: золото занято выбором клетки, и совпади они —
+    выделение перестало бы читаться. Синее на золотом — та же пара, что у javaway.info.
     Все пары «текст на фоне» проверены на контраст не ниже 4,5:1.
 -->
 <resources>
-    <color name="accent">#FFD33E</color>
-    <color name="accent_dark">#8A6D00</color>
-    <color name="on_accent">#000000</color>
+    <color name="accent">#D4AF37</color>
+    <!-- Тёмная доля акцента для полосы статуса: светлые системные значки на ней читаются. -->
+    <color name="accent_dark">#7A6420</color>
+    <color name="on_accent">#070707</color>
     <color name="toolbar_line">#80000000</color>
+    <!-- В тёмной теме фон диалога тёмный, и тёмное золото на нём пропало бы: берём само золото. -->
+    <color name="dialog_accent">#D4AF37</color>
 
-    <color name="background">#111E30</color>
-    <color name="surface">#173257</color>
-    <color name="on_background">#E9EDF3</color>
-    <color name="on_surface">#FBFBFB</color>
-    <color name="muted">#A3B4CE</color>
-    <color name="divider">#24406B</color>
+    <color name="background">#1A1A1A</color>
+    <color name="surface">#252525</color>
+    <color name="on_background">#E0E0E0</color>
+    <color name="on_surface">#D0D0D0</color>
+    <color name="muted">#A09A8C</color>
+    <color name="divider">#3A3A3A</color>
     <color name="error">#FF7B7B</color>
 
-    <color name="cell">#16263F</color>
-    <color name="cell_peer">#1B3050</color>
-    <color name="cell_same">#33301A</color>
-    <color name="cell_selected">#453D1B</color>
+    <!--
+        Доска. Четыре ступени идут по возрастанию яркости — клетка, сосед по строке и
+        столбцу, клетка с той же цифрой, выбранная, — а линия сетки светлее их всех:
+        иначе на подсвеченных клетках она пропадает и доска расползается в пятно.
+    -->
+    <color name="cell">#202020</color>
+    <color name="cell_peer">#333333</color>
+    <color name="cell_same">#3A3218</color>
+    <color name="cell_selected">#4E421C</color>
     <color name="cell_wrong">#452020</color>
-    <color name="board_line">#24406B</color>
-    <color name="board_frame">#6C8BBF</color>
+    <color name="board_line">#454545</color>
+    <color name="board_frame">#7A7259</color>
 
-    <color name="digit_given">#F2F5FA</color>
+    <!-- Цифры. Данность — почти белая и жирная, своя — синяя: перепутать нельзя даже боком. -->
+    <color name="digit_given">#F0F0F0</color>
     <color name="digit_player">#7FB2FF</color>
-    <color name="digit_note">#A3B4CE</color>
+    <color name="digit_note">#A09A8C</color>
     <color name="digit_wrong">#FF7B7B</color>
 
     <color name="heart">#FF6B6B</color>
-    <color name="heart_lost">#2C3E5C</color>
+    <color name="heart_lost">#3A3A3A</color>
 </resources>

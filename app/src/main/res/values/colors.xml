@@ -23,6 +23,12 @@
     <color name="accent_dark">#8A6D00</color>
     <color name="on_accent">#000000</color>
     <color name="toolbar_line">#80000000</color>
+    <!--
+        Акцент кнопок системного диалога. Не `accent`: сам жёлтый на светлом фоне диалога
+        даёт 1,4:1 и надписи «Закрыть» и «Сбросить» пропадают. Тёмная доля золота держит
+        4,6:1 и при этом остаётся тем же цветом семейства, а не платформенным синим.
+    -->
+    <color name="dialog_accent">#8A6D00</color>
 
     <color name="background">#F1F1EC</color>
     <color name="surface">#E7E7E1</color>

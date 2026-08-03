@@ -49,16 +49,12 @@ final class StatsDialog {
         ((TextView) view.findViewById(R.id.best_streak)).setText(
                 activity.getString(R.string.stats_streak_best, stats.bestStreak));
 
-        best(activity, view, R.id.best_easy, R.string.level_easy,
-                stats.best(Difficulty.EASY, false));
+        best(activity, view, R.id.best_easy, R.string.level_easy, stats.best(Difficulty.EASY));
         best(activity, view, R.id.best_medium, R.string.level_medium,
-                stats.best(Difficulty.MEDIUM, false));
-        best(activity, view, R.id.best_hard, R.string.level_hard,
-                stats.best(Difficulty.HARD, false));
+                stats.best(Difficulty.MEDIUM));
+        best(activity, view, R.id.best_hard, R.string.level_hard, stats.best(Difficulty.HARD));
         best(activity, view, R.id.best_expert, R.string.level_expert,
-                stats.best(Difficulty.EXPERT, false));
-        best(activity, view, R.id.best_daily, R.string.level_daily,
-                stats.best(Difficulty.EASY, true));
+                stats.best(Difficulty.EXPERT));
 
         new AlertDialog.Builder(activity)
                 .setTitle(R.string.stats)

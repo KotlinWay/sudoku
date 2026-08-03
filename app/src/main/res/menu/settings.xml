@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Связь с автором: каналы, магазины, сайт, оценка и письмо. Семью строками подряд они
+    занимали половину экрана настроек, хотя нужны раз в жизни, — поэтому живут под тремя
+    точками бара, как и редко нужное на экране игры.
+
+    Все пункты showAsAction="never": в баре настроек нет ничего, что стоило бы значка,
+    и три точки остаются его единственной кнопкой.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_telegram"
+        android:showAsAction="never"
+        android:title="@string/link_telegram" />
+    <item
+        android:id="@+id/menu_max"
+        android:showAsAction="never"
+        android:title="@string/link_max" />
+    <item
+        android:id="@+id/menu_play"
+        android:showAsAction="never"
+        android:title="@string/link_play" />
+    <item
+        android:id="@+id/menu_rustore"
+        android:showAsAction="never"
+        android:title="@string/link_rustore" />
+    <item
+        android:id="@+id/menu_site"
+        android:showAsAction="never"
+        android:title="@string/link_site" />
+    <item
+        android:id="@+id/menu_rate"
+        android:showAsAction="never"
+        android:title="@string/link_rate" />
+    <item
+        android:id="@+id/menu_write"
+        android:showAsAction="never"
+        android:title="@string/link_write" />
+</menu>
