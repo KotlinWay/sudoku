@@ -3,13 +3,12 @@
     Фон отдельным цветом, а не `@color/accent`: у акцента есть ночная доля (золото #D4AF37),
     и значок в ящике приложений менял бы оттенок вслед за системной темой.
 
-    Передний план — панель 60dp на холсте 108dp. Не 78dp, как на исходнике владельца:
-    там значок нарисован во весь квадрат, а маска лаунчера показывает круг 72dp. При 60dp
-    самый дальний пиксель цифры лежит в 34,3dp от центра, то есть цифры «5» и «3» целы
-    под любой маской, включая круглую на Pixel.
+    Передний план уже пришёл с запасом: самый дальний пиксель цифры лежит в 32,5dp от
+    центра холста 108dp, то есть внутри круга 72dp, которым его вырезает маска лаунчера,
+    с запасом почти в 4dp. Пересчитывать нечего, поле само нарисовано с отступом.
 -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
     <background android:drawable="@color/ic_launcher_bg" />
-    <foreground android:drawable="@mipmap/ic_launcher_fg" />
-    <monochrome android:drawable="@mipmap/ic_launcher_mono" />
+    <foreground android:drawable="@mipmap/ic_launcher_foreground" />
+    <monochrome android:drawable="@mipmap/ic_launcher_monochrome" />
 </adaptive-icon>
