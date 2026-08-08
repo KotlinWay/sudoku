@@ -29,6 +29,7 @@
         <item name="android:actionOverflowMenuStyle">@style/OverflowMenu</item>
         <item name="android:alertDialogTheme">@style/AlertDialog</item>
         <item name="android:statusBarColor">@color/accent_dark</item>
+        <item name="android:windowLightStatusBar">true</item>
         <!--
             Линия под баром задана темой, а не разметками: система рисует windowContentOverlay
             поверх содержимого ровно по нижнему краю бара, на каждом экране и без копий
