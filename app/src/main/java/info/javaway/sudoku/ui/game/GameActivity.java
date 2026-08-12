@@ -147,6 +147,7 @@ public class GameActivity extends ThemedActivity
 
     @Override
     protected void onPause() {
+        keepScreenOn = false;
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         handler.removeCallbacks(tick);
         // Единственное место, где партия ложится на диск. Система обещает вызвать onPause
@@ -305,6 +306,8 @@ public class GameActivity extends ThemedActivity
 
     private void renderScreenPolicy(GameState state) {
         int flag = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        boolean current = (getWindow().getAttributes().flags & flag) != 0;
+        if (!ScreenPolicy.shouldChange(current, keepScreenOn, state.phase)) return;
         if (ScreenPolicy.keepOn(keepScreenOn, state.phase)) {
             getWindow().addFlags(flag);
         } else {

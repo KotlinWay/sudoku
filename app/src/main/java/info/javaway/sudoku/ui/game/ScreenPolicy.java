@@ -7,6 +7,10 @@ final class ScreenPolicy {
         return enabled && phase == GameState.Phase.PLAYING;
     }
 
+    static boolean shouldChange(boolean current, boolean enabled, GameState.Phase phase) {
+        return current != keepOn(enabled, phase);
+    }
+
     private ScreenPolicy() {
     }
 }
