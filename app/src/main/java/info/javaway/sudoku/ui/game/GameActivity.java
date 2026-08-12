@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.TouchDelegate;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -93,6 +94,7 @@ public class GameActivity extends ThemedActivity
     private ImageButton toolPause;
 
     private boolean landscape;
+    private boolean keepScreenOn;
 
     private Menu menu;
 
@@ -137,12 +139,15 @@ public class GameActivity extends ThemedActivity
         today = Day.now();
         responder.setEnabled(prefs.sound());
         store.dispatch(new GameAction.CandidatesChanged(prefs.candidates()));
+        keepScreenOn = prefs.keepScreenOn();
+        renderScreenPolicy(store.state());
         // Часы тикают всегда, пока экран виден: тик вне игры редьюсер просто не примет.
         handler.postDelayed(tick, TICK_MILLIS);
     }
 
     @Override
     protected void onPause() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         handler.removeCallbacks(tick);
         // Единственное место, где партия ложится на диск. Система обещает вызвать onPause
         // перед тем, как убить процесс, поэтому чаще незачем.
@@ -295,6 +300,16 @@ public class GameActivity extends ThemedActivity
         renderTools(state);
         renderPanel(state);
         syncBackCallback(state);
+        renderScreenPolicy(state);
+    }
+
+    private void renderScreenPolicy(GameState state) {
+        int flag = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        if (ScreenPolicy.keepOn(keepScreenOn, state.phase)) {
+            getWindow().addFlags(flag);
+        } else {
+            getWindow().clearFlags(flag);
+        }
     }
 
     /**
