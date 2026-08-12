@@ -2,7 +2,7 @@ package info.javaway.sudoku.ui.settings;
 
 import info.javaway.sudoku.settings.Theme;
 
-/** Что показывает экран настроек. Три настройки — всё остальное на нём это ссылки. */
+/** Что показывает экран настроек. Четыре настройки — всё остальное на нём это ссылки. */
 public final class SettingsState {
 
     public final boolean candidates;

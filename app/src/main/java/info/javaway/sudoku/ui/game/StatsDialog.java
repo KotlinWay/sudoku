@@ -26,18 +26,24 @@ final class StatsDialog {
         void onReset();
     }
 
-    static void show(Activity activity, StatsStore store, OnReset onReset) {
+    interface OnModalVisibilityChanged {
+        void onChanged(boolean visible);
+    }
+
+    static void show(Activity activity, StatsStore store, OnReset onReset,
+                     OnModalVisibilityChanged onModalVisibilityChanged) {
         Background.work(() -> {
             Stats stats = store.load();
             Background.main(() -> {
                 if (activity.isFinishing()) return;
-                display(activity, store, stats, onReset);
+                display(activity, store, stats, onReset, onModalVisibilityChanged);
             });
         });
     }
 
     private static void display(Activity activity, StatsStore store, Stats stats,
-                                OnReset onReset) {
+                                OnReset onReset,
+                                OnModalVisibilityChanged onModalVisibilityChanged) {
         View view = LayoutInflater.from(activity).inflate(R.layout.dialog_stats, null);
 
         tile(view, R.id.tile_played, R.string.stats_played, String.valueOf(stats.played));
@@ -56,13 +62,15 @@ final class StatsDialog {
         best(activity, view, R.id.best_expert, R.string.level_expert,
                 stats.best(Difficulty.EXPERT));
 
-        new AlertDialog.Builder(activity)
+        AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setTitle(R.string.stats)
                 .setView(view)
                 .setPositiveButton(R.string.close, null)
                 .setNeutralButton(R.string.stats_reset,
-                        (dialog, which) -> confirmReset(activity, store, onReset))
-                .show();
+                        (ignored, which) -> confirmReset(
+                                activity, store, onReset, onModalVisibilityChanged))
+                .create();
+        showModal(dialog, onModalVisibilityChanged);
     }
 
     /**
@@ -70,16 +78,26 @@ final class StatsDialog {
      * партия при этом не трогается — про это в вопросе сказано отдельно, иначе человек
      * решит, что теряет и её.
      */
-    private static void confirmReset(Activity activity, StatsStore store, OnReset onReset) {
-        new AlertDialog.Builder(activity)
+    private static void confirmReset(Activity activity, StatsStore store, OnReset onReset,
+                                     OnModalVisibilityChanged onModalVisibilityChanged) {
+        AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setTitle(R.string.stats_reset_title)
                 .setMessage(R.string.stats_reset_text)
-                .setPositiveButton(R.string.stats_reset, (dialog, which) -> {
+                .setPositiveButton(R.string.stats_reset, (ignored, which) -> {
                     Background.work(store::clear);
                     onReset.onReset();
                 })
                 .setNegativeButton(android.R.string.cancel, null)
-                .show();
+                .create();
+        showModal(dialog, onModalVisibilityChanged);
+    }
+
+    /** Считает вложенные окна отдельно, чтобы переход к подтверждению не открыл зазор. */
+    private static void showModal(AlertDialog dialog,
+                                  OnModalVisibilityChanged onModalVisibilityChanged) {
+        dialog.setOnShowListener(ignored -> onModalVisibilityChanged.onChanged(true));
+        dialog.setOnDismissListener(ignored -> onModalVisibilityChanged.onChanged(false));
+        dialog.show();
     }
 
     private static void tile(View root, int id, int label, String value) {

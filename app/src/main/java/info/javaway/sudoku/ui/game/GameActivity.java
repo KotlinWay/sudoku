@@ -95,6 +95,7 @@ public class GameActivity extends ThemedActivity
 
     private boolean landscape;
     private boolean keepScreenOn;
+    private int visibleModalCount;
 
     private Menu menu;
 
@@ -307,12 +308,18 @@ public class GameActivity extends ThemedActivity
     private void renderScreenPolicy(GameState state) {
         int flag = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         boolean current = (getWindow().getAttributes().flags & flag) != 0;
-        if (!ScreenPolicy.shouldChange(current, keepScreenOn, state.phase)) return;
-        if (ScreenPolicy.keepOn(keepScreenOn, state.phase)) {
+        boolean modalVisible = visibleModalCount > 0;
+        if (!ScreenPolicy.shouldChange(current, keepScreenOn, state.phase, modalVisible)) return;
+        if (ScreenPolicy.keepOn(keepScreenOn, state.phase, modalVisible)) {
             getWindow().addFlags(flag);
         } else {
             getWindow().clearFlags(flag);
         }
+    }
+
+    private void onModalVisibilityChanged(boolean visible) {
+        visibleModalCount += visible ? 1 : -1;
+        renderScreenPolicy(store.state());
     }
 
     /**
@@ -557,7 +564,8 @@ public class GameActivity extends ThemedActivity
         } else if (id == R.id.menu_new) {
             openNewGame();
         } else if (id == R.id.menu_stats) {
-            StatsDialog.show(this, statsStore, () -> render(store.state()));
+            StatsDialog.show(this, statsStore, () -> render(store.state()),
+                    this::onModalVisibilityChanged);
         } else if (id == R.id.menu_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
         } else {

@@ -18,7 +18,7 @@ import info.javaway.sudoku.ui.ThemedActivity;
 import info.javaway.sudoku.ui.mvi.Store;
 
 /**
- * Настройки: три настройки и связь с автором. Экран ничего не решает сам — он показывает,
+ * Настройки: четыре настройки и связь с автором. Экран ничего не решает сам — он показывает,
  * что записано, и записывает то, что переключили.
  */
 public class SettingsActivity extends ThemedActivity
