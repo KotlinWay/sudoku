@@ -51,7 +51,8 @@ public class SettingsActivity extends ThemedActivity
         // отрисовку: экран успевал показать значения по умолчанию, а через кадр переставить
         // их на настоящие, и человек видел, как переключатели сами перещёлкиваются.
         store = new Store<>(
-                SettingsState.of(prefs.candidates(), prefs.sound(), prefs.theme()),
+                SettingsState.of(prefs.candidates(), prefs.sound(),
+                        prefs.keepScreenOn(), prefs.theme()),
                 new SettingsReducer());
 
         bindViews();

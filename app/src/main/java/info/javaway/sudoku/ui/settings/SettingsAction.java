@@ -20,6 +20,14 @@ public abstract class SettingsAction {
         }
     }
 
+    public static final class KeepScreenOnToggled extends SettingsAction {
+        public final boolean value;
+
+        public KeepScreenOnToggled(boolean value) {
+            this.value = value;
+        }
+    }
+
     public static final class ThemePicked extends SettingsAction {
         public final Theme value;
 

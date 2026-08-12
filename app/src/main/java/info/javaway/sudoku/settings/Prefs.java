@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Настройки приложения: две про игру и одна про оформление.
+ * Настройки приложения: три настройки игры и одна про оформление.
  *
- * Звук включён по умолчанию: отклик на ход — часть игры, а выключить его человек может
+ * Звук и удержание экрана включены по умолчанию. Отклик на ход — часть игры, а выключить его человек может
  * и кнопкой громкости. Показ возможных цифр выключен: это заметная поблажка, и включать
  * её за игрока нельзя. Тема берётся у системы, пока её не переспросили явно.
  */
@@ -15,6 +15,7 @@ public final class Prefs {
     private static final String FILE = "settings";
     private static final String SOUND = "sound";
     private static final String CANDIDATES = "candidates";
+    private static final String KEEP_SCREEN_ON = "keep_screen_on";
     private static final String THEME = "theme";
 
     private final SharedPreferences preferences;
@@ -37,6 +38,14 @@ public final class Prefs {
 
     public void setCandidates(boolean value) {
         preferences.edit().putBoolean(CANDIDATES, value).apply();
+    }
+
+    public boolean keepScreenOn() {
+        return preferences.getBoolean(KEEP_SCREEN_ON, true);
+    }
+
+    public void setKeepScreenOn(boolean value) {
+        preferences.edit().putBoolean(KEEP_SCREEN_ON, value).apply();
     }
 
     public Theme theme() {

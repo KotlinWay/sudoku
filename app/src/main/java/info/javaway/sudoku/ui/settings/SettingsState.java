@@ -7,11 +7,13 @@ public final class SettingsState {
 
     public final boolean candidates;
     public final boolean sound;
+    public final boolean keepScreenOn;
     public final Theme theme;
 
-    private SettingsState(boolean candidates, boolean sound, Theme theme) {
+    private SettingsState(boolean candidates, boolean sound, boolean keepScreenOn, Theme theme) {
         this.candidates = candidates;
         this.sound = sound;
+        this.keepScreenOn = keepScreenOn;
         this.theme = theme;
     }
 
@@ -20,19 +22,24 @@ public final class SettingsState {
      * поэтому промежуточного состояния «ещё не прочитано» у экрана нет — а вместе с ним
      * нет и переключателей, доигрывающих анимацию на глазах у открывшего экран.
      */
-    public static SettingsState of(boolean candidates, boolean sound, Theme theme) {
-        return new SettingsState(candidates, sound, theme);
+    public static SettingsState of(boolean candidates, boolean sound,
+                                   boolean keepScreenOn, Theme theme) {
+        return new SettingsState(candidates, sound, keepScreenOn, theme);
     }
 
     public SettingsState candidates(boolean value) {
-        return new SettingsState(value, sound, theme);
+        return new SettingsState(value, sound, keepScreenOn, theme);
     }
 
     public SettingsState sound(boolean value) {
-        return new SettingsState(candidates, value, theme);
+        return new SettingsState(candidates, value, keepScreenOn, theme);
+    }
+
+    public SettingsState keepScreenOn(boolean value) {
+        return new SettingsState(candidates, sound, value, theme);
     }
 
     public SettingsState theme(Theme value) {
-        return new SettingsState(candidates, sound, value);
+        return new SettingsState(candidates, sound, keepScreenOn, value);
     }
 }

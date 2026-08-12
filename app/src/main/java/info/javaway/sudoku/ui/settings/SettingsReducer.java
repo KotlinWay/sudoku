@@ -18,6 +18,12 @@ public final class SettingsReducer
             boolean value = ((SettingsAction.SoundToggled) action).value;
             return Update.of(state.sound(value), new SettingsEffect.SaveSound(value));
         }
+        if (action instanceof SettingsAction.KeepScreenOnToggled) {
+            boolean value = ((SettingsAction.KeepScreenOnToggled) action).value;
+            if (state.keepScreenOn == value) return Update.state(state);
+            return Update.of(state.keepScreenOn(value),
+                    new SettingsEffect.SaveKeepScreenOn(value));
+        }
         if (action instanceof SettingsAction.ThemePicked) {
             // Уже выбранную тему не перевыбирают: иначе отрисовка, отметившая нужный кружок,
             // тут же попросила бы пересобрать экран, а тот отрисовался бы снова.

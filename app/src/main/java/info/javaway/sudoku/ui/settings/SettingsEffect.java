@@ -27,6 +27,14 @@ public abstract class SettingsEffect {
         }
     }
 
+    public static final class SaveKeepScreenOn extends SettingsEffect {
+        public final boolean value;
+
+        public SaveKeepScreenOn(boolean value) {
+            this.value = value;
+        }
+    }
+
     /** Записать тему и показать её: экран перестраивается на новых цветах прямо под пальцем. */
     public static final class SaveTheme extends SettingsEffect {
         public final Theme value;
