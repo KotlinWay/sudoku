@@ -33,6 +33,7 @@ public class SettingsActivity extends ThemedActivity
     private Prefs prefs;
     private Switch candidates;
     private Switch sound;
+    private Switch keepScreenOn;
     private RadioGroup theme;
 
     @Override
@@ -43,6 +44,7 @@ public class SettingsActivity extends ThemedActivity
         prefs = new Prefs(this);
         candidates = findViewById(R.id.candidates);
         sound = findViewById(R.id.sound);
+        keepScreenOn = findViewById(R.id.keep_screen_on);
         theme = findViewById(R.id.theme);
 
         // Чтение с диска на главном потоке, и это дешевле, чем кажется: файл настроек уже
@@ -108,6 +110,8 @@ public class SettingsActivity extends ThemedActivity
                 value -> store.dispatch(new SettingsAction.CandidatesToggled(value)));
         bind(sound, state.sound,
                 value -> store.dispatch(new SettingsAction.SoundToggled(value)));
+        bind(keepScreenOn, state.keepScreenOn,
+                value -> store.dispatch(new SettingsAction.KeepScreenOnToggled(value)));
         bindTheme(state.theme);
     }
 
@@ -155,6 +159,9 @@ public class SettingsActivity extends ThemedActivity
         } else if (effect instanceof SettingsEffect.SaveSound) {
             boolean value = ((SettingsEffect.SaveSound) effect).value;
             Background.work(() -> prefs.setSound(value));
+        } else if (effect instanceof SettingsEffect.SaveKeepScreenOn) {
+            boolean value = ((SettingsEffect.SaveKeepScreenOn) effect).value;
+            prefs.setKeepScreenOn(value);
         } else if (effect instanceof SettingsEffect.SaveTheme) {
             // Единственная настройка, которую пишем на главном потоке: сразу за записью экран
             // пересобирается и читает её заново — фоновая запись могла бы к тому моменту

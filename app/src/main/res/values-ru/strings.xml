@@ -82,6 +82,8 @@
     <string name="candidates_hint">Я покажу в пустых клетках цифры, которые туда ещё подходят.</string>
     <string name="sound">Звук</string>
     <string name="sound_hint">Короткий отклик на ход. Звучит тише системной громкости и молчит, когда звонок телефона выключен или стоит на вибрации.</string>
+    <string name="keep_screen_on">Не выключать экран</string>
+    <string name="keep_screen_on_hint">Пока идёт партия, я не дам экрану погаснуть.</string>
 
     <string name="settings_theme">Оформление</string>
     <string name="theme_system">Как в системе</string>

@@ -51,6 +51,18 @@
             android:layout_height="wrap_content"
             android:text="@string/sound_hint" />
 
+        <Switch
+            android:id="@+id/keep_screen_on"
+            style="@style/Toggle"
+            android:layout_marginTop="@dimen/space_l"
+            android:text="@string/keep_screen_on" />
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/keep_screen_on_hint" />
+
         <!-- ── Оформление ───────────────────────────────────────────────── -->
 
         <View style="@style/Divider" />

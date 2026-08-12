@@ -81,6 +81,8 @@
     <string name="candidates_hint">I will show the digits that still fit in every empty cell.</string>
     <string name="sound">Sound</string>
     <string name="sound_hint">A short response to a move. Quieter than the system volume, and silent when the ringer is off or set to vibrate.</string>
+    <string name="keep_screen_on">Keep screen on</string>
+    <string name="keep_screen_on_hint">While a game is running, I will keep the screen on.</string>
 
     <string name="settings_theme">Appearance</string>
     <string name="theme_system">Follow the system</string>
