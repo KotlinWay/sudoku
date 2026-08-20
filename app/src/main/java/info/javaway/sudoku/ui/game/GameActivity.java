@@ -76,6 +76,7 @@ public class GameActivity extends ThemedActivity
     private BoardView board;
     private ConfettiView confetti;
     private LinearLayout hearts;
+    private GameMode renderedLivesMode;
     private TextView hints;
     private TextView timer;
     /** Подпись уровня. Только в альбоме: в портрете уровень назван заголовком бара. */
@@ -203,6 +204,7 @@ public class GameActivity extends ThemedActivity
         board = findViewById(R.id.board);
         confetti = findViewById(R.id.confetti);
         hearts = findViewById(R.id.hearts);
+        renderedLivesMode = null;
         hints = findViewById(R.id.hints);
         timer = findViewById(R.id.timer);
         level = findViewById(R.id.level);
@@ -324,29 +326,58 @@ public class GameActivity extends ThemedActivity
         renderScreenPolicy(store.state());
     }
 
-    /**
-     * Жизни рисуются сердцами по числу, которое прощает уровень: на эксперте оно одно,
-     * и это видно до первого хода. Значки заводятся заново только когда их число сменилось.
-     */
+    /** Жизни рисуются конечными сердцами или сердцем с бесконечностью, смотря по режиму. */
     private void renderStatus(GameState state) {
+        if (renderedLivesMode != state.mode) {
+            hearts.removeAllViews();
+            if (state.mode == GameMode.RELAXED) {
+                ImageView heart = new ImageView(this);
+                heart.setImageResource(R.drawable.ic_heart);
+                heart.setColorFilter(color(R.color.heart));
+                heart.setContentDescription(null);
+                heart.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                int side = getResources().getDimensionPixelSize(R.dimen.space_l);
+                LinearLayout.LayoutParams heartParams =
+                        new LinearLayout.LayoutParams(side, side);
+                heartParams.setMarginEnd(
+                        getResources().getDimensionPixelSize(R.dimen.space_xs));
+                hearts.addView(heart, heartParams);
+
+                TextView infinity = new TextView(this, null, 0, R.style.Text_Body);
+                infinity.setText(R.string.infinity);
+                infinity.setTextColor(color(R.color.heart));
+                infinity.setContentDescription(null);
+                infinity.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                hearts.addView(infinity);
+            }
+            renderedLivesMode = state.mode;
+        }
+
         int limit = state.mistakeLimit();
-        while (hearts.getChildCount() > limit) {
-            hearts.removeViewAt(hearts.getChildCount() - 1);
+        if (state.mode == GameMode.STANDARD) {
+            while (hearts.getChildCount() > limit) {
+                hearts.removeViewAt(hearts.getChildCount() - 1);
+            }
+            while (hearts.getChildCount() < limit) {
+                ImageView heart = new ImageView(this);
+                heart.setImageResource(R.drawable.ic_heart);
+                heart.setContentDescription(null);
+                heart.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+                int side = getResources().getDimensionPixelSize(R.dimen.space_l);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(side, side);
+                params.setMarginEnd(getResources().getDimensionPixelSize(R.dimen.space_xs));
+                hearts.addView(heart, params);
+            }
+            int left = limit - state.mistakes;
+            for (int i = 0; i < limit; i++) {
+                ((ImageView) hearts.getChildAt(i)).setColorFilter(
+                        color(i < left ? R.color.heart : R.color.heart_lost));
+            }
+            hearts.setContentDescription(
+                    getString(R.string.lives_desc, Math.max(0, left), limit));
+        } else {
+            hearts.setContentDescription(getString(R.string.relaxed_lives_desc));
         }
-        while (hearts.getChildCount() < limit) {
-            ImageView heart = new ImageView(this);
-            heart.setImageResource(R.drawable.ic_heart);
-            int side = getResources().getDimensionPixelSize(R.dimen.space_l);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(side, side);
-            params.setMarginEnd(getResources().getDimensionPixelSize(R.dimen.space_xs));
-            hearts.addView(heart, params);
-        }
-        int left = limit - state.mistakes;
-        for (int i = 0; i < limit; i++) {
-            ((ImageView) hearts.getChildAt(i)).setColorFilter(
-                    color(i < left ? R.color.heart : R.color.heart_lost));
-        }
-        hearts.setContentDescription(getString(R.string.lives_desc, Math.max(0, left), limit));
 
         hints.setText(String.valueOf(state.hintsLeft));
         // Плашка теперь кнопка, поэтому описание говорит и что будет, и сколько осталось:

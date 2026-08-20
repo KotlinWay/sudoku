@@ -215,6 +215,14 @@ public class GameReducerTest {
         assertFalse(relaxed.recordEligible);
     }
 
+    @Test public void обычнаяПобедаПослеПодсказкиНеСтавитРекорд() {
+        GameState state = reduce(
+                playing(GameMode.STANDARD, Difficulty.EASY, CELL, OTHER),
+                new GameAction.HintTapped()).selecting(OTHER);
+
+        assertFalse(win(state).recordEligible);
+    }
+
     /** Последняя цифра встаёт так же, как все прежние: свой отклик у неё не пропадает. */
     @Test public void победаНеСъедаетОткликСамогоХода() {
         Update<GameState, GameEffect> update = REDUCER.reduce(playing(Difficulty.EASY, CELL),
@@ -397,6 +405,16 @@ public class GameReducerTest {
         assertEquals(Difficulty.HARD, generate.level);
         assertEquals(Difficulty.HARD, update.state.level);
         assertEquals(GameState.Phase.GENERATING, update.state.phase);
+    }
+
+    @Test public void новаяПартияСохраняетЯвноПереданныйРежим() {
+        GameState before = playing(GameMode.STANDARD, Difficulty.EASY, CELL, OTHER);
+
+        GameState after = reduce(before,
+                new GameAction.NewGame(Difficulty.HARD, GameMode.RELAXED));
+
+        assertEquals(Difficulty.HARD, after.level);
+        assertEquals(GameMode.RELAXED, after.mode);
     }
 
     /** Часы, жизни, подсказки и история — всё с нуля: это другая партия, а не продолжение. */
