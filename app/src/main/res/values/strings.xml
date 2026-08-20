@@ -53,7 +53,7 @@
     <!-- Время, подсказки и уровень одной строкой: порядок частей тоже перевод. -->
     <string name="won_summary">%1$s · %2$s · %3$s</string>
     <string name="won_record">New best time!</string>
-    <string name="won_best">Best time: %1$s</string>
+    <string name="won_best">Best time in a regular game without hints: %1$s</string>
     <string name="won_no_best">Best time counts only in regular games played without hints.</string>
     <string name="view_board">Look at the board</string>
 

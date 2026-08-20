@@ -89,6 +89,18 @@ public class StatsTest {
         assertEquals(300, second.best);
     }
 
+    @Test public void болееБыстраяНедопустимаяПобедаВозвращаетПрежнийОбычныйРекорд() {
+        Stats first = Stats.empty().afterWin(Difficulty.HARD, 300, 0, true, TODAY).stats;
+
+        Outcome second = first.afterWin(Difficulty.HARD, 60, 0, false, TOMORROW);
+
+        assertFalse(second.record);
+        assertEquals(300, second.best);
+        assertEquals(300, second.stats.best(Difficulty.HARD));
+        assertEquals(2, second.stats.played);
+        assertEquals(2, second.stats.wins);
+    }
+
     @Test public void рекордыУровнейНеСмешиваются() {
         Stats stats = Stats.empty().afterWin(Difficulty.EASY, 100, 0, true, TODAY).stats;
 

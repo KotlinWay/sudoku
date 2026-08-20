@@ -54,7 +54,7 @@
     </plurals>
     <string name="won_summary">%1$s · %2$s · %3$s</string>
     <string name="won_record">Новое лучшее время!</string>
-    <string name="won_best">Лучшее время: %1$s</string>
+    <string name="won_best">Лучшее время в обычной игре без подсказок: %1$s</string>
     <string name="won_no_best">Лучшее время учитывается только в обычных партиях без подсказок.</string>
     <string name="view_board">Посмотреть доску</string>
 

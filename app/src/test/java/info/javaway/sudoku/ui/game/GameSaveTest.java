@@ -2,7 +2,9 @@ package info.javaway.sudoku.ui.game;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -59,6 +61,26 @@ public class GameSaveTest {
         assertEquals(GameMode.STANDARD, after.mode);
     }
 
+    @Test public void огромныйСчётчикИсторииНеВыделяетПамятьИУдаляетФайл()
+            throws IOException {
+        File file = writeFixture(4, GameMode.STANDARD.name(), Integer.MAX_VALUE, false);
+
+        GameState after = new GameSave(folder.getRoot()).load(false);
+
+        assertNull(after);
+        assertFalse(file.exists());
+    }
+
+    @Test public void счётчикИсторииНеМожетПревышатьЧислоХодовВОстаткеФайла()
+            throws IOException {
+        File file = writeFixture(4, GameMode.STANDARD.name(), 2, true);
+
+        GameState after = new GameSave(folder.getRoot()).load(false);
+
+        assertNull(after);
+        assertFalse(file.exists());
+    }
+
     private void assertRoundTrip(GameMode mode) {
         Board beforeMove = Boards.withEmpty(CELL);
         Board afterMove = Rules.place(beforeMove, CELL, Boards.answer(CELL));
@@ -93,6 +115,11 @@ public class GameSaveTest {
     }
 
     private void writeFixture(int version, String mode) throws IOException {
+        writeFixture(version, mode, 0, false);
+    }
+
+    private File writeFixture(int version, String mode, int historySize,
+                              boolean writeOneMove) throws IOException {
         Board board = Boards.withEmpty(CELL);
         File file = new File(folder.getRoot(), "game.bin");
         try (DataOutputStream out = new DataOutputStream(new FileOutputStream(file))) {
@@ -110,8 +137,15 @@ public class GameSaveTest {
             out.writeInt(2);
             out.writeInt(37);
             out.writeBoolean(false);
-            out.writeInt(0);
+            out.writeInt(historySize);
+            if (writeOneMove) {
+                out.writeInt(1);
+                out.writeInt(CELL);
+                out.writeInt(0);
+                out.writeInt(0);
+            }
         }
+        return file;
     }
 
     private static void writeCells(DataOutputStream out, int[] cells) throws IOException {

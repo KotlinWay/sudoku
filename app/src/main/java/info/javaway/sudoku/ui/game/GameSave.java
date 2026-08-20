@@ -39,6 +39,8 @@ public final class GameSave {
      */
     private static final int VERSION = 4;
     private static final int VERSION_WITHOUT_MODE = 3;
+    /** Размер длины хода и хотя бы одной тройки «клетка, значение, пометки». */
+    private static final int MIN_MOVE_BYTES = Integer.BYTES * 4;
 
     private final File file;
 
@@ -153,6 +155,9 @@ public final class GameSave {
     private static List<Move> readMoves(DataInputStream in) throws IOException {
         int size = in.readInt();
         if (size < 0) throw new IOException();
+        // Сначала доказываем, что заявленное число ходов вообще помещается в файл. Иначе
+        // повреждённые четыре байта могут потребовать гигантский ArrayList ещё до чтения.
+        if ((long) size * MIN_MOVE_BYTES > in.available()) throw new IOException();
         List<Move> moves = new ArrayList<>(size);
         for (int i = 0; i < size; i++) {
             moves.add(Move.read(in));
