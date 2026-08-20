@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.ui.mvi.Update;
 
 public class NewGameReducerTest {
@@ -14,16 +15,20 @@ public class NewGameReducerTest {
     private static final NewGameReducer REDUCER = new NewGameReducer();
 
     private static NewGameState screen() {
-        return NewGameState.of(null, 0);
+        return NewGameState.of(null, null, 0, GameMode.STANDARD);
     }
 
     private static NewGameState screenOver(Difficulty level, int seconds) {
-        return NewGameState.of(level, seconds);
+        return NewGameState.of(level, GameMode.STANDARD, seconds, GameMode.STANDARD);
     }
 
     private static NewGameEffect.Start start(Update<NewGameState, NewGameEffect> update) {
+        return effect(update, NewGameEffect.Start.class);
+    }
+
+    private static <T> T effect(Update<NewGameState, NewGameEffect> update, Class<T> type) {
         for (NewGameEffect effect : update.effects) {
-            if (effect instanceof NewGameEffect.Start) return (NewGameEffect.Start) effect;
+            if (type.isInstance(effect)) return type.cast(effect);
         }
         return null;
     }
@@ -45,6 +50,25 @@ public class NewGameReducerTest {
                 REDUCER.reduce(screen(), new NewGameAction.LevelPicked(Difficulty.EXPERT));
 
         assertEquals(Difficulty.EXPERT, start(update).level);
+    }
+
+    @Test public void переключательМеняетРежимИПроситЕгоЗапомнить() {
+        Update<NewGameState, NewGameEffect> update = REDUCER.reduce(screen(),
+                new NewGameAction.ModeToggled(GameMode.RELAXED));
+
+        assertEquals(GameMode.RELAXED, update.state.mode);
+        assertEquals(GameMode.RELAXED,
+                effect(update, NewGameEffect.RememberMode.class).mode);
+    }
+
+    @Test public void уровеньЗапускаетсяСВыбраннымРежимом() {
+        NewGameState relaxed = REDUCER.reduce(screen(),
+                new NewGameAction.ModeToggled(GameMode.RELAXED)).state;
+
+        NewGameEffect.Start start = start(REDUCER.reduce(relaxed,
+                new NewGameAction.LevelPicked(Difficulty.EXPERT)));
+        assertEquals(Difficulty.EXPERT, start.level);
+        assertEquals(GameMode.RELAXED, start.mode);
     }
 
     /** Выбор ничего не меняет на экране: он закрывает его, а не перерисовывает. */

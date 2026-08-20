@@ -108,6 +108,9 @@
 
     <!-- Экран новой игры -->
     <string name="current_game">Сейчас идёт партия: %1$s, %2$s. Новая игра сотрёт её, вернуться к ней будет нельзя.</string>
+    <string name="relaxed_mode">Спокойная игра</string>
+    <string name="relaxed_mode_hint">Ошибки подсвечиваются, но не заканчивают партию.</string>
+    <string name="current_game_relaxed">Сейчас идёт партия: %1$s, спокойно, %2$s. Новая игра сотрёт её, вернуться к ней будет нельзя.</string>
     <plurals name="clues">
         <item quantity="one">%1$d открытая цифра</item>
         <item quantity="few">%1$d открытые цифры</item>

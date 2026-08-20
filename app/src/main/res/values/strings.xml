@@ -107,6 +107,9 @@
 
     <!-- New game screen -->
     <string name="current_game">A game is running: %1$s, %2$s. A new game erases it, and you cannot go back to it.</string>
+    <string name="relaxed_mode">Relaxed game</string>
+    <string name="relaxed_mode_hint">Wrong digits are highlighted, but they do not end the game.</string>
+    <string name="current_game_relaxed">A game is running: %1$s, relaxed, %2$s. A new game erases it, and you cannot go back to it.</string>
     <plurals name="clues">
         <item quantity="one">%1$d digit open</item>
         <item quantity="other">%1$d digits open</item>

@@ -34,6 +34,19 @@
             android:padding="@dimen/space_m"
             android:visibility="gone" />
 
+        <Switch
+            android:id="@+id/relaxed"
+            style="@style/Toggle"
+            android:layout_marginBottom="@dimen/space_xs"
+            android:text="@string/relaxed_mode" />
+
+        <TextView
+            style="@style/Text.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_l"
+            android:text="@string/relaxed_mode_hint" />
+
         <include android:id="@+id/level_easy" layout="@layout/item_level" />
 
         <include android:id="@+id/level_medium" layout="@layout/item_level" />
