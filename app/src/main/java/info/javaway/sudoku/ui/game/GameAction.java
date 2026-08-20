@@ -2,6 +2,7 @@ package info.javaway.sudoku.ui.game;
 
 import info.javaway.sudoku.game.Board;
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 
 /** Всё, что может случиться на экране игры: жест человека, ответ фоновой работы или тик часов. */
 public abstract class GameAction {
@@ -12,9 +13,11 @@ public abstract class GameAction {
      */
     public static final class NewGame extends GameAction {
         public final Difficulty level;
+        public final GameMode mode;
 
-        public NewGame(Difficulty level) {
+        public NewGame(Difficulty level, GameMode mode) {
             this.level = level;
+            this.mode = mode;
         }
     }
 

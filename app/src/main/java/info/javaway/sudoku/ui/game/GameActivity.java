@@ -32,6 +32,7 @@ import info.javaway.sudoku.game.Cells;
 import info.javaway.sudoku.game.Day;
 import info.javaway.sudoku.game.Difficulty;
 import info.javaway.sudoku.game.Generator;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.game.Rng;
 import info.javaway.sudoku.settings.Prefs;
 import info.javaway.sudoku.stats.Outcome;
@@ -128,7 +129,8 @@ public class GameActivity extends ThemedActivity
         GameState restored = save.load(prefs.candidates());
         store = new Store<>(restored != null
                 ? restored
-                : GameState.generating(Difficulty.EASY, prefs.candidates()),
+                : GameState.generating(
+                        Difficulty.EASY, prefs.gameMode(), prefs.candidates()),
                 new GameReducer());
         store.attach(this, this);
         if (restored == null) generate(Difficulty.EASY);
@@ -455,7 +457,7 @@ public class GameActivity extends ThemedActivity
         if (state.phase == GameState.Phase.LOST) {
             fillPanel(R.string.lost_title, getString(R.string.lost_text), null,
                     getString(R.string.try_again),
-                    v -> store.dispatch(new GameAction.NewGame(state.level)), null);
+                    v -> store.dispatch(new GameAction.NewGame(state.level, state.mode)), null);
             return;
         }
 
@@ -470,7 +472,7 @@ public class GameActivity extends ThemedActivity
                 ? getString(R.string.won_best, Labels.time(this, state.best))
                 : getString(R.string.won_no_best);
         fillPanel(R.string.won_title, summary, note, getString(R.string.new_game),
-                v -> store.dispatch(new GameAction.NewGame(state.level)),
+                v -> store.dispatch(new GameAction.NewGame(state.level, state.mode)),
                 v -> store.dispatch(new GameAction.PanelDismissed()));
     }
 
@@ -584,6 +586,7 @@ public class GameActivity extends ThemedActivity
         boolean losing = state.accepts() || state.phase == GameState.Phase.PAUSED;
         if (losing && state.history.isStarted()) {
             intent.putExtra(NewGameActivity.EXTRA_CURRENT_LEVEL, state.level.name());
+            intent.putExtra(NewGameActivity.EXTRA_CURRENT_MODE, state.mode.name());
             intent.putExtra(NewGameActivity.EXTRA_CURRENT_SECONDS, state.seconds);
         }
         startActivityForResult(intent, NEW_GAME);
@@ -595,7 +598,9 @@ public class GameActivity extends ThemedActivity
         if (request != NEW_GAME || code != RESULT_OK || data == null) return;
         store.dispatch(new GameAction.NewGame(
                 Difficulty.byName(data.getStringExtra(NewGameActivity.EXTRA_LEVEL),
-                        Difficulty.MEDIUM)));
+                        Difficulty.MEDIUM),
+                GameMode.byName(data.getStringExtra(NewGameActivity.EXTRA_MODE),
+                        GameMode.STANDARD)));
     }
 
     /**

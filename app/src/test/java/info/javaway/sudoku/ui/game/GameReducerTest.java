@@ -12,6 +12,7 @@ import info.javaway.sudoku.game.Board;
 import info.javaway.sudoku.game.Boards;
 import info.javaway.sudoku.game.Cells;
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.game.Notes;
 import info.javaway.sudoku.ui.mvi.Update;
 
@@ -33,7 +34,11 @@ public class GameReducerTest {
     }
 
     private static GameState playing(Difficulty level, int... empty) {
-        return GameState.generating(level, false)
+        return playing(GameMode.STANDARD, level, empty);
+    }
+
+    private static GameState playing(GameMode mode, Difficulty level, int... empty) {
+        return GameState.generating(level, mode, false)
                 .started(Boards.withEmpty(empty))
                 .selecting(empty[0]);
     }
@@ -47,6 +52,12 @@ public class GameReducerTest {
             if (type.isInstance(effect)) return type.cast(effect);
         }
         return null;
+    }
+
+    private static GameEffect.RecordWin win(GameState state) {
+        return effect(REDUCER.reduce(state,
+                new GameAction.DigitTapped(Boards.answer(state.selected))),
+                GameEffect.RecordWin.class);
     }
 
     /* ── Ход ──────────────────────────────────────────────────────────────── */
@@ -137,6 +148,27 @@ public class GameReducerTest {
         assertNotNull(effect(update, GameEffect.RecordLoss.class));
     }
 
+    @Test public void спокойнаяОшибкаНеЗаканчиваетПартиюИНеПишетПроигрыш() {
+        GameState state = playing(GameMode.RELAXED, Difficulty.EXPERT, CELL, OTHER);
+
+        Update<GameState, GameEffect> update = REDUCER.reduce(state,
+                new GameAction.DigitTapped(Boards.wrongAnswer(CELL)));
+
+        assertEquals(GameState.Phase.PLAYING, update.state.phase);
+        assertEquals(1, update.state.mistakes);
+        assertNull(effect(update, GameEffect.RecordLoss.class));
+    }
+
+    @Test public void спокойнаяИграПродолжаетсяПослеЛимита() {
+        GameState state = playing(GameMode.RELAXED, Difficulty.EASY, CELL, OTHER);
+        for (int i = 0; i < state.mistakeLimit() + 2; i++) {
+            state = reduce(state.selecting(CELL), new GameAction.DigitTapped(
+                    Boards.wrongAnswer(CELL)));
+            state = reduce(state, new GameAction.EraseTapped());
+        }
+        assertEquals(GameState.Phase.PLAYING, state.phase);
+    }
+
     @Test public void послеПроигрышаХодыНеПринимаются() {
         GameState lost = reduce(playing(Difficulty.EXPERT, CELL, OTHER),
                 new GameAction.DigitTapped(Boards.wrongAnswer(CELL)));
@@ -173,6 +205,14 @@ public class GameReducerTest {
         assertNotNull(effect(update, GameEffect.Celebrate.class));
         assertEquals(Difficulty.EASY, win.level);
         assertEquals(0, win.hints);
+    }
+
+    @Test public void победаПередаётДопустимостьРекорда() {
+        GameEffect.RecordWin standard = win(playing(GameMode.STANDARD, Difficulty.EASY, CELL));
+        GameEffect.RecordWin relaxed = win(playing(GameMode.RELAXED, Difficulty.EASY, CELL));
+
+        assertTrue(standard.recordEligible);
+        assertFalse(relaxed.recordEligible);
     }
 
     /** Последняя цифра встаёт так же, как все прежние: свой отклик у неё не пропадает. */
@@ -339,7 +379,8 @@ public class GameReducerTest {
     }
 
     @Test public void часыНеИдутПокаСоставляетсяЗадача() {
-        GameState generating = GameState.generating(Difficulty.EASY, false);
+        GameState generating = GameState.generating(
+                Difficulty.EASY, GameMode.STANDARD, false);
 
         assertEquals(0, reduce(generating, new GameAction.Ticked()).seconds);
     }
@@ -348,7 +389,8 @@ public class GameReducerTest {
 
     @Test public void новаяПартияПроситСоставитьЗадачуВыбранногоУровня() {
         Update<GameState, GameEffect> update =
-                REDUCER.reduce(playing(), new GameAction.NewGame(Difficulty.HARD));
+                REDUCER.reduce(playing(), new GameAction.NewGame(
+                        Difficulty.HARD, GameMode.STANDARD));
 
         GameEffect.Generate generate = effect(update, GameEffect.Generate.class);
         assertNotNull(generate);
@@ -363,7 +405,7 @@ public class GameReducerTest {
                 Boards.wrongAnswer(CELL))), new GameAction.Ticked());
 
         Update<GameState, GameEffect> update = REDUCER.reduce(started,
-                new GameAction.NewGame(Difficulty.HARD));
+                new GameAction.NewGame(Difficulty.HARD, GameMode.STANDARD));
 
         assertEquals(0, update.state.seconds);
         assertEquals(0, update.state.mistakes);
@@ -378,14 +420,16 @@ public class GameReducerTest {
                 new GameAction.DigitTapped(Boards.answer(CELL)));
 
         Update<GameState, GameEffect> update =
-                REDUCER.reduce(won, new GameAction.NewGame(Difficulty.EASY));
+                REDUCER.reduce(won, new GameAction.NewGame(
+                        Difficulty.EASY, GameMode.STANDARD));
 
         assertNotNull(effect(update, GameEffect.Generate.class));
         assertEquals(GameState.Phase.GENERATING, update.state.phase);
     }
 
     @Test public void готоваяДоскаЗаменяетЗаглушку() {
-        GameState generating = GameState.generating(Difficulty.HARD, false);
+        GameState generating = GameState.generating(
+                Difficulty.HARD, GameMode.STANDARD, false);
         Board board = Boards.withEmpty(CELL);
 
         GameState after = reduce(generating, new GameAction.Generated(board));
@@ -414,7 +458,8 @@ public class GameReducerTest {
     @Test public void настройкаКандидатовПереживаетНовуюПартию() {
         GameState state = reduce(playing(), new GameAction.CandidatesChanged(true));
 
-        GameState after = reduce(state, new GameAction.NewGame(Difficulty.HARD));
+        GameState after = reduce(state, new GameAction.NewGame(
+                Difficulty.HARD, GameMode.STANDARD));
 
         assertTrue(after.candidates);
     }
@@ -433,7 +478,8 @@ public class GameReducerTest {
     }
 
     @Test public void покаЗадачаСоставляетсяКлеткиНеВыбираются() {
-        GameState generating = GameState.generating(Difficulty.EASY, false);
+        GameState generating = GameState.generating(
+                Difficulty.EASY, GameMode.STANDARD, false);
 
         assertEquals(-1, reduce(generating, new GameAction.CellTapped(CELL)).selected);
     }

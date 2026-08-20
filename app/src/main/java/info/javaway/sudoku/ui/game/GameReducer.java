@@ -5,6 +5,7 @@ import java.util.List;
 
 import info.javaway.sudoku.game.Board;
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.game.Move;
 import info.javaway.sudoku.game.Rules;
 import info.javaway.sudoku.ui.mvi.Reducer;
@@ -20,7 +21,8 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
     @Override
     public Update<GameState, GameEffect> reduce(GameState state, GameAction action) {
         if (action instanceof GameAction.NewGame) {
-            return generate(state, ((GameAction.NewGame) action).level);
+            GameAction.NewGame newGame = (GameAction.NewGame) action;
+            return generate(state, newGame.level, newGame.mode);
         }
         if (action instanceof GameAction.Generated) {
             return Update.state(state.started(((GameAction.Generated) action).board));
@@ -69,8 +71,9 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
      * правило «деструктивное только с предпросмотром» выполнено предпросмотром, а не
      * подтверждением вдогонку.
      */
-    private Update<GameState, GameEffect> generate(GameState state, Difficulty level) {
-        return Update.of(GameState.generating(level, state.candidates),
+    private Update<GameState, GameEffect> generate(
+            GameState state, Difficulty level, GameMode mode) {
+        return Update.of(GameState.generating(level, mode, state.candidates),
                 new GameEffect.Generate(level));
     }
 
@@ -111,7 +114,8 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
         List<GameEffect> effects = effects(
                 new GameEffect.Animate(GameEffect.Animation.SHAKE, cell),
                 new GameEffect.Respond(GameEffect.Feedback.WRONG));
-        if (mistaken.mistakes >= mistaken.mistakeLimit()) {
+        if (mistaken.mode == GameMode.STANDARD
+                && mistaken.mistakes >= mistaken.mistakeLimit()) {
             effects.add(new GameEffect.RecordLoss());
             return update(mistaken.finished(GameState.Phase.LOST), effects);
         }
@@ -179,7 +183,8 @@ public final class GameReducer implements Reducer<GameState, GameAction, GameEff
         if (!state.board.isSolved()) return update(state, effects);
         effects.add(new GameEffect.Respond(GameEffect.Feedback.WIN));
         effects.add(new GameEffect.Celebrate());
-        effects.add(new GameEffect.RecordWin(state.level, state.seconds, state.hintsUsed));
+        effects.add(new GameEffect.RecordWin(state.level, state.seconds, state.hintsUsed,
+                state.mode == GameMode.STANDARD && state.hintsUsed == 0));
         return update(state.finished(GameState.Phase.WON), effects);
     }
 

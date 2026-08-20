@@ -59,11 +59,13 @@ public abstract class GameEffect {
         public final Difficulty level;
         public final int seconds;
         public final int hints;
+        public final boolean recordEligible;
 
-        public RecordWin(Difficulty level, int seconds, int hints) {
+        public RecordWin(Difficulty level, int seconds, int hints, boolean recordEligible) {
             this.level = level;
             this.seconds = seconds;
             this.hints = hints;
+            this.recordEligible = recordEligible;
         }
     }
 

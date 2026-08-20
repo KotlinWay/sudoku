@@ -2,6 +2,7 @@ package info.javaway.sudoku.ui.game;
 
 import info.javaway.sudoku.game.Board;
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.game.Move;
 import info.javaway.sudoku.stats.Stats;
 
@@ -29,6 +30,7 @@ public final class GameState {
 
     public final Phase phase;
     public final Difficulty level;
+    public final GameMode mode;
     public final Board board;
     public final History history;
 
@@ -56,6 +58,7 @@ public final class GameState {
     private GameState(Draft draft) {
         this.phase = draft.phase;
         this.level = draft.level;
+        this.mode = draft.mode;
         this.board = draft.board;
         this.history = draft.history;
         this.selected = draft.selected;
@@ -71,10 +74,11 @@ public final class GameState {
     }
 
     /** Состояние на время работы генератора: уровень уже выбран, доски ещё нет. */
-    public static GameState generating(Difficulty level, boolean candidates) {
+    public static GameState generating(Difficulty level, GameMode mode, boolean candidates) {
         Draft draft = new Draft();
         draft.phase = Phase.GENERATING;
         draft.level = level;
+        draft.mode = mode;
         draft.board = Board.blank();
         draft.history = History.empty();
         draft.selected = -1;
@@ -207,6 +211,7 @@ public final class GameState {
         Draft draft = new Draft();
         draft.phase = phase;
         draft.level = level;
+        draft.mode = mode;
         draft.board = board;
         draft.history = history;
         draft.selected = selected;
@@ -226,6 +231,7 @@ public final class GameState {
     static final class Draft {
         Phase phase;
         Difficulty level;
+        GameMode mode;
         Board board;
         History history;
         int selected;
