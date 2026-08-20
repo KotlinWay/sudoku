@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.accessibility.AccessibilityNodeProvider;
 
@@ -355,6 +356,12 @@ public class BoardView extends View {
      */
     @Override
     public boolean dispatchHoverEvent(MotionEvent event) {
+        AccessibilityManager manager = (AccessibilityManager)
+                getContext().getSystemService(Context.ACCESSIBILITY_SERVICE);
+        if (!manager.isEnabled() || !manager.isTouchExplorationEnabled()) {
+            hovered = AccessibilityNodeProvider.HOST_VIEW_ID;
+            return super.dispatchHoverEvent(event);
+        }
         int cell = event.getAction() == MotionEvent.ACTION_HOVER_EXIT
                 ? AccessibilityNodeProvider.HOST_VIEW_ID
                 : cellAt(event.getX(), event.getY());
