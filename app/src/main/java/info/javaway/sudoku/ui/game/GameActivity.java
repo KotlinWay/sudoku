@@ -114,16 +114,13 @@ public class GameActivity extends ThemedActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        rebuildLayout();
 
         prefs = new Prefs(this);
         save = new GameSave(getFilesDir());
         statsStore = new StatsStore(this);
         responder = new Responder(this, prefs.sound());
         today = Day.now();
-
-        setupBar();
-        bindViews();
 
         // Чтение сохранения на главном потоке намеренно: это один небольшой файл, а рисовать
         // пустую доску, которая через мгновение сменится вчерашней партией, — хуже.
@@ -135,6 +132,21 @@ public class GameActivity extends ThemedActivity
                 new GameReducer());
         store.attach(this, this);
         if (restored == null) generate(Difficulty.EASY);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // ThemedActivity может завершить этот экземпляр и запустить новый. Старое окно
+        // после этого не перестраиваем.
+        if (isFinishing()) return;
+
+        Configuration current = getApplicationContext().getResources().getConfiguration();
+        boolean currentLandscape = current.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        if (landscape != currentLandscape) {
+            syncConfiguration(current);
+            rebuildLayout();
+        }
     }
 
     @Override
@@ -168,10 +180,30 @@ public class GameActivity extends ThemedActivity
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+        syncConfiguration(config);
+        rebuildLayout();
+    }
+
+    /**
+     * ThemedActivity строит контекст из полной копии конфигурации, поэтому тот сохраняет
+     * выбранную тему, но не получает новую ориентацию. Обновляем его текущими параметрами
+     * окна, оставляя ночной бит темы прежним.
+     */
+    @SuppressWarnings("deprecation")
+    private void syncConfiguration(Configuration current) {
+        int night = getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK;
+        Configuration effective = new Configuration(current);
+        effective.uiMode = (effective.uiMode & ~Configuration.UI_MODE_NIGHT_MASK) | night;
+        getResources().updateConfiguration(effective, getResources().getDisplayMetrics());
+    }
+
+    /** Привязывает разметку текущей ориентации и только затем рисует состояние Store. */
+    private void rebuildLayout() {
         setContentView(R.layout.activity_game);
         setupBar();
         bindViews();
-        render(store.state());
+        if (store != null) render(store.state());
     }
 
     @Override
