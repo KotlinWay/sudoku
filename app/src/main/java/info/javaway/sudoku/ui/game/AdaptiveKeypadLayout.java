@@ -13,14 +13,11 @@ import info.javaway.sudoku.R;
  */
 public final class AdaptiveKeypadLayout extends ViewGroup {
 
-    private static final int TALL_COLUMNS = 2;
-    private static final int TALL_ROWS = 5;
-    private static final int COMPACT_COLUMNS = 5;
-    private static final int COMPACT_ROWS = 2;
+    private static final int SLOT_COUNT = 10;
 
     private final int gap;
-    private final int minimumCellHeight;
-    private boolean tallLayout;
+    private final int minimumCellSize;
+    private KeypadLayoutPolicy.Layout layout;
 
     public AdaptiveKeypadLayout(Context context) {
         this(context, null);
@@ -33,16 +30,19 @@ public final class AdaptiveKeypadLayout extends ViewGroup {
     public AdaptiveKeypadLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         gap = getResources().getDimensionPixelSize(R.dimen.space_xs);
-        minimumCellHeight = getResources().getDimensionPixelSize(R.dimen.touch_target);
+        minimumCellSize = getResources().getDimensionPixelSize(R.dimen.touch_target);
     }
 
     @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (getChildCount() != SLOT_COUNT) {
+            throw new IllegalStateException("Adaptive keypad must contain exactly 10 keys");
+        }
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int availableWidth = Math.max(0, width - getPaddingLeft() - getPaddingRight());
         int availableHeight = Math.max(0, height - getPaddingTop() - getPaddingBottom());
 
-        int naturalCellHeight = minimumCellHeight;
+        int naturalCellHeight = minimumCellSize;
         int naturalWidthSpec = MeasureSpec.makeMeasureSpec(availableWidth, MeasureSpec.AT_MOST);
         int naturalHeightSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         for (int index = 0; index < getChildCount(); index++) {
@@ -52,20 +52,27 @@ public final class AdaptiveKeypadLayout extends ViewGroup {
             naturalCellHeight = Math.max(naturalCellHeight, child.getMeasuredHeight());
         }
 
-        tallLayout = KeypadLayoutPolicy.usesTallLayout(
+        layout = KeypadLayoutPolicy.select(
+                availableWidth,
                 availableHeight,
+                minimumCellSize,
                 naturalCellHeight,
                 gap
         );
-        int columns = tallLayout ? TALL_COLUMNS : COMPACT_COLUMNS;
-        int rows = tallLayout ? TALL_ROWS : COMPACT_ROWS;
-        int cellWidth = cellSize(availableWidth, columns);
-        int cellHeight = cellSize(availableHeight, rows);
-        int cellWidthSpec = MeasureSpec.makeMeasureSpec(cellWidth, MeasureSpec.EXACTLY);
-        int cellHeightSpec = MeasureSpec.makeMeasureSpec(cellHeight, MeasureSpec.EXACTLY);
+        KeypadLayoutPolicy.Geometry geometry = geometry(
+                availableWidth,
+                availableHeight,
+                getPaddingLeft(),
+                getPaddingTop()
+        );
         for (int index = 0; index < getChildCount(); index++) {
             View child = getChildAt(index);
-            if (child.getVisibility() != GONE) child.measure(cellWidthSpec, cellHeightSpec);
+            if (child.getVisibility() == GONE) continue;
+            KeypadLayoutPolicy.Bounds cell = geometry.cell(index);
+            child.measure(
+                    MeasureSpec.makeMeasureSpec(cell.width(), MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(cell.height(), MeasureSpec.EXACTLY)
+            );
         }
 
         setMeasuredDimension(
@@ -75,25 +82,46 @@ public final class AdaptiveKeypadLayout extends ViewGroup {
     }
 
     @Override protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        int columns = tallLayout ? TALL_COLUMNS : COMPACT_COLUMNS;
+        KeypadLayoutPolicy.Geometry geometry = geometry(
+                Math.max(0, right - left - getPaddingLeft() - getPaddingRight()),
+                Math.max(0, bottom - top - getPaddingTop() - getPaddingBottom()),
+                getPaddingLeft(),
+                getPaddingTop()
+        );
         for (int index = 0; index < getChildCount(); index++) {
             View child = getChildAt(index);
+            // Индекс ребёнка и есть семантический слот: GONE не сдвигает следующие ID.
             if (child.getVisibility() == GONE) continue;
-            int column = tallLayout ? index / TALL_ROWS : index % COMPACT_COLUMNS;
-            int row = tallLayout ? index % TALL_ROWS : index / COMPACT_COLUMNS;
-            int childLeft = getPaddingLeft() + column * (child.getMeasuredWidth() + gap);
-            int childTop = getPaddingTop() + row * (child.getMeasuredHeight() + gap);
+            KeypadLayoutPolicy.Bounds cell = geometry.cell(index);
             child.layout(
-                    childLeft,
-                    childTop,
-                    childLeft + child.getMeasuredWidth(),
-                    childTop + child.getMeasuredHeight()
+                    cell.left,
+                    cell.top,
+                    cell.right,
+                    cell.bottom
             );
         }
     }
 
-    private int cellSize(int available, int count) {
-        return Math.max(0, (available - (count - 1) * gap) / count);
+    @Override public void onRtlPropertiesChanged(int layoutDirection) {
+        super.onRtlPropertiesChanged(layoutDirection);
+        requestLayout();
+    }
+
+    private KeypadLayoutPolicy.Geometry geometry(
+            int availableWidth,
+            int availableHeight,
+            int contentLeft,
+            int contentTop
+    ) {
+        return KeypadLayoutPolicy.geometry(
+                layout,
+                contentLeft,
+                contentTop,
+                availableWidth,
+                availableHeight,
+                gap,
+                getLayoutDirection() == LAYOUT_DIRECTION_RTL
+        );
     }
 
     @Override protected LayoutParams generateDefaultLayoutParams() {
