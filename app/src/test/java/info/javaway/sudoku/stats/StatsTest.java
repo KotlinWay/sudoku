@@ -64,6 +64,13 @@ public class StatsTest {
         assertEquals(Stats.NO_TIME, outcome.stats.best(Difficulty.HARD));
     }
 
+    @Test public void подсказкаНеМешаетРекордуПриЯвнойДопустимости() {
+        Outcome outcome = Stats.empty().afterWin(Difficulty.HARD, 60, 1, true, TODAY);
+
+        assertTrue(outcome.record);
+        assertEquals(60, outcome.stats.best(Difficulty.HARD));
+    }
+
     @Test public void болееБыстраяПартияОбновляетРекорд() {
         Stats first = Stats.empty().afterWin(Difficulty.HARD, 420, 0, true, TODAY).stats;
 
