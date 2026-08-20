@@ -52,7 +52,7 @@
     <string name="won_summary">%1$s · %2$s · %3$s</string>
     <string name="won_record">New best time!</string>
     <string name="won_best">Best time: %1$s</string>
-    <string name="won_no_best">Best time counts only in games played without hints.</string>
+    <string name="won_no_best">Best time counts only in regular games played without hints.</string>
     <string name="view_board">Look at the board</string>
 
     <string name="lost_title">Game over</string>
@@ -66,7 +66,7 @@
     <string name="stats_win_rate">Win rate</string>
     <string name="stats_streak">Streak</string>
     <string name="stats_percent">%1$d %%</string>
-    <string name="stats_best_title">Best time without hints</string>
+    <string name="stats_best_title">Best time in a regular game without hints</string>
     <string name="stats_no_time">-</string>
     <string name="stats_streak_best">Best streak: %1$d</string>
     <string name="stats_reset">Reset stats</string>

@@ -533,7 +533,7 @@ public class GameActivity extends ThemedActivity
     private void recordWin(GameEffect.RecordWin win) {
         Background.work(() -> {
             Outcome outcome = statsStore.load()
-                    .afterWin(win.level, win.seconds, win.hints, today);
+                    .afterWin(win.level, win.seconds, win.hints, win.recordEligible, today);
             statsStore.save(outcome.stats);
             Background.main(() -> store.dispatch(
                     new GameAction.WinRecorded(outcome.best, outcome.record)));

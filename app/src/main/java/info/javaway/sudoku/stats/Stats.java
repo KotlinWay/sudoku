@@ -56,14 +56,13 @@ public final class Stats {
         return new Stats(played + 1, wins, streak, bestStreak, lastWinDay, hintsUsed, best);
     }
 
-    /**
-     * Победа. Лучшее время засчитывается только без подсказок: иначе рекорд ставится тремя
-     * нажатиями на лампочку и перестаёт что-либо значить.
-     */
-    public Outcome afterWin(Difficulty level, int seconds, int hints, Day today) {
+    /** Победа. Допустимость рекорда определяют правила игры. */
+    public Outcome afterWin(Difficulty level, int seconds, int hints, boolean recordEligible,
+                            Day today) {
         int slot = level.ordinal();
         int previous = best[slot];
-        boolean record = hints == 0 && (previous == NO_TIME || seconds < previous);
+        boolean record = recordEligible
+                && (previous == NO_TIME || seconds < previous);
 
         int[] nextBest = best.clone();
         if (record) nextBest[slot] = seconds;
