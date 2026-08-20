@@ -11,7 +11,6 @@
     <string name="time_desc">Time played: %1$s</string>
     <string name="lives_desc">Lives left: %1$d of %2$d</string>
     <string name="relaxed_lives_desc">Relaxed game. Mistakes do not end the game.</string>
-    <string name="infinity">∞</string>
     <string name="hint_button_desc">Hint. %1$d left</string>
 
     <string name="generating">Making a puzzle…</string>

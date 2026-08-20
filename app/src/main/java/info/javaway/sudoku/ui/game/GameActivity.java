@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -236,6 +237,7 @@ public class GameActivity extends ThemedActivity
         board = findViewById(R.id.board);
         confetti = findViewById(R.id.confetti);
         hearts = findViewById(R.id.hearts);
+        hearts.setGravity(Gravity.CENTER_VERTICAL);
         renderedLivesMode = null;
         hints = findViewById(R.id.hints);
         timer = findViewById(R.id.timer);
@@ -375,12 +377,12 @@ public class GameActivity extends ThemedActivity
                         getResources().getDimensionPixelSize(R.dimen.space_xs));
                 hearts.addView(heart, heartParams);
 
-                TextView infinity = new TextView(this, null, 0, R.style.Text_Body);
-                infinity.setText(R.string.infinity);
-                infinity.setTextColor(color(R.color.heart));
+                ImageView infinity = new ImageView(this);
+                infinity.setImageResource(R.drawable.ic_infinity);
+                infinity.setColorFilter(color(R.color.heart));
                 infinity.setContentDescription(null);
                 infinity.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-                hearts.addView(infinity);
+                hearts.addView(infinity, new LinearLayout.LayoutParams(side, side));
             }
             renderedLivesMode = state.mode;
         }

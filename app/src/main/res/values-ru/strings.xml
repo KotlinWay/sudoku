@@ -12,7 +12,6 @@
     <string name="time_desc">Прошло времени: %1$s</string>
     <string name="lives_desc">Жизней осталось: %1$d из %2$d</string>
     <string name="relaxed_lives_desc">Спокойная игра. Ошибки не заканчивают партию.</string>
-    <string name="infinity">∞</string>
     <string name="hint_button_desc">Подсказка. Осталось: %1$d</string>
 
     <string name="generating">Составляю задачу…</string>
