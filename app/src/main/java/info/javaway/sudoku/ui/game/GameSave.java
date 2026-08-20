@@ -14,6 +14,7 @@ import java.util.List;
 import info.javaway.sudoku.game.Board;
 import info.javaway.sudoku.game.Cells;
 import info.javaway.sudoku.game.Difficulty;
+import info.javaway.sudoku.game.GameMode;
 import info.javaway.sudoku.game.Move;
 import info.javaway.sudoku.stats.Stats;
 
@@ -34,8 +35,10 @@ public final class GameSave {
      * Версия 2: из формата ушли стек отменённых ходов и состояние «после» у каждого хода —
      * и то и другое читал только «вернуть», а его в игре больше нет.
      * Версия 3: ушёл признак «это задача дня» — самого режима в игре больше нет.
+     * Версия 4: после уровня добавлен режим партии.
      */
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
+    private static final int VERSION_WITHOUT_MODE = 3;
 
     private final File file;
 
@@ -50,10 +53,14 @@ public final class GameSave {
         if (!file.exists()) return null;
         try (DataInputStream in = new DataInputStream(
                 new BufferedInputStream(new FileInputStream(file)))) {
-            if (in.readInt() != VERSION) return null;
+            int version = in.readInt();
+            if (version != VERSION && version != VERSION_WITHOUT_MODE) return null;
 
             GameState.Draft draft = GameState.draft();
             draft.level = Difficulty.byName(in.readUTF(), Difficulty.MEDIUM);
+            draft.mode = version == VERSION
+                    ? GameMode.byName(in.readUTF(), GameMode.STANDARD)
+                    : GameMode.STANDARD;
 
             int[] puzzle = readCells(in);
             int[] solution = readCells(in);
@@ -102,6 +109,7 @@ public final class GameSave {
                 new BufferedOutputStream(new FileOutputStream(file)))) {
             out.writeInt(VERSION);
             out.writeUTF(state.level.name());
+            out.writeUTF(state.mode.name());
 
             writeCells(out, state.board.puzzle());
             writeCells(out, state.board.solution());
