@@ -3,6 +3,8 @@ package info.javaway.sudoku.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import info.javaway.sudoku.game.GameMode;
+
 /**
  * Настройки приложения: три настройки игры и одна про оформление.
  *
@@ -17,6 +19,7 @@ public final class Prefs {
     private static final String CANDIDATES = "candidates";
     private static final String KEEP_SCREEN_ON = "keep_screen_on";
     private static final String THEME = "theme";
+    private static final String GAME_MODE = "game_mode";
 
     private final SharedPreferences preferences;
 
@@ -54,5 +57,13 @@ public final class Prefs {
 
     public void setTheme(Theme value) {
         preferences.edit().putString(THEME, value.name()).apply();
+    }
+
+    public GameMode gameMode() {
+        return GameMode.byName(preferences.getString(GAME_MODE, null), GameMode.STANDARD);
+    }
+
+    public void setGameMode(GameMode value) {
+        preferences.edit().putString(GAME_MODE, value.name()).apply();
     }
 }
