@@ -123,13 +123,13 @@
 **Description:** Review all warnings after Tasks 4-6; fix compatibility/accessibility correctness issues and document intentional layout/performance warnings without broad baselines.
 
 **Acceptance criteria:**
-- [ ] `Integer.BYTES` does not create an API-23 compatibility warning.
-- [ ] Board touch accessibility is either correctly implemented or narrowly justified.
-- [ ] Every remaining warning has an evidence-backed disposition.
+- [x] `Integer.BYTES` does not create an API-23 compatibility warning.
+- [x] Board touch accessibility is either correctly implemented or narrowly justified.
+- [x] Every remaining warning has an evidence-backed disposition.
 
 **Verification:**
-- [ ] Run `lintRelease --rerun-tasks` and review the full text report.
-- [ ] Run focused tests for any touched behavior.
+- [x] Run `lintRelease --rerun-tasks` and review the full text report.
+- [x] Run focused tests for any touched behavior.
 
 **Dependencies:** Task 6
 

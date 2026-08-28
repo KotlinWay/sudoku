@@ -40,7 +40,7 @@ public final class GameSave {
     private static final int VERSION = 4;
     private static final int VERSION_WITHOUT_MODE = 3;
     /** Размер длины хода и хотя бы одной тройки «клетка, значение, пометки». */
-    private static final int MIN_MOVE_BYTES = Integer.BYTES * 4;
+    private static final int MIN_MOVE_BYTES = Integer.SIZE / Byte.SIZE * 4;
 
     private final File file;
 

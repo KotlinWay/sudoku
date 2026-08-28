@@ -1,5 +1,6 @@
 package info.javaway.sudoku.ui.game;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -319,6 +320,11 @@ public class BoardView extends View {
 
     /* ── Ввод ─────────────────────────────────────────────────────────────── */
 
+    /**
+     * Each cell is a separate virtual accessibility node whose ACTION_CLICK calls tap(cell).
+     * A host performClick() cannot identify which of the 81 cells should be activated.
+     */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() != MotionEvent.ACTION_UP) {

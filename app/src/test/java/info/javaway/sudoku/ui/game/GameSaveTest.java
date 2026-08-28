@@ -81,6 +81,15 @@ public class GameSaveTest {
         assertFalse(file.exists());
     }
 
+    @Test public void oneCompleteMoveFitsInTheRemainingFile() throws IOException {
+        writeFixture(4, GameMode.STANDARD.name(), 1, true);
+
+        GameState after = new GameSave(folder.getRoot()).load(false);
+
+        assertNotNull(after);
+        assertEquals(1, after.history.done().size());
+    }
+
     private void assertRoundTrip(GameMode mode) {
         Board beforeMove = Boards.withEmpty(CELL);
         Board afterMove = Rules.place(beforeMove, CELL, Boards.answer(CELL));
