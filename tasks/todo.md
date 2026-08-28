@@ -5,13 +5,14 @@
 **Description:** Establish which certificate signed the live RuStore 1.3 APK, the highest published version code, and whether Play requires proof of ownership for `info.javaway.sudoku`.
 
 **Acceptance criteria:**
-- [ ] RuStore signing SHA-256 is recorded without private material.
-- [ ] Highest RuStore version code/name are read from the console.
+- [x] RuStore signing SHA-256 is recorded without private material.
+- [x] Highest published RuStore version code/name are read from the installed
+  store artifact (`4` / `1.3`); console confirmation remains part of Task 18.
 - [ ] The tracked PKCS#12 certificate is confirmed as matching or not matching RuStore.
 
 **Verification:**
 - [ ] Compare certificate fingerprints character-for-character.
-- [ ] Save only public fingerprints and console facts in release notes.
+- [x] Save only public fingerprints and store facts in release notes.
 
 **Dependencies:** None
 
