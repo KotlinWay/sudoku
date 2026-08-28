@@ -275,13 +275,13 @@
 **Description:** Create `mysite-sudoku-play` from clean site `master`, update the Sudoku page for release 1.4/relaxed mode and current Play assets, and keep privacy claims stable unless app behavior changed.
 
 **Acceptance criteria:**
-- [ ] Primary dirty `mysite` worktree is unchanged.
-- [ ] Product copy matches release 1.4 and does not claim Play availability prematurely.
-- [ ] Stable product/privacy URLs remain unchanged.
+- [x] Primary dirty `mysite` worktree is unchanged.
+- [x] Product copy matches release 1.4 and does not claim Play availability prematurely.
+- [x] Stable product/privacy URLs remain unchanged.
 
 **Verification:**
-- [ ] Review the isolated diff and screenshots at mobile/desktop sizes.
-- [ ] Confirm privacy URL returns HTTP 200.
+- [x] Review the isolated diff and screenshots at mobile/desktop sizes.
+- [x] Confirm privacy URL returns HTTP 200.
 
 **Dependencies:** Tasks 10-12
 
@@ -294,13 +294,13 @@
 **Description:** Run full site gates in the isolated worktree, browser-test both Sudoku pages, and integrate without mixing feedback-system work.
 
 **Acceptance criteria:**
-- [ ] Tests, typecheck, lint, and production build pass.
-- [ ] Product and privacy pages render correctly in a real browser.
-- [ ] Integration strategy preserves the other agent's uncommitted files.
+- [x] Tests, typecheck, lint, and production build pass.
+- [x] Product and privacy pages render correctly in a real browser.
+- [x] Integration strategy preserves the other agent's uncommitted files.
 
 **Verification:**
-- [ ] `npm test`, `npm run typecheck`, `npm run lint`, `npm run build` pass.
-- [ ] Browser console/network show no release-page errors.
+- [x] `npm test`, `npm run typecheck`, `npm run lint`, `npm run build` pass.
+- [x] Browser console/network show no release-page errors.
 
 **Dependencies:** Task 15
 
