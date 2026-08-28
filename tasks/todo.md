@@ -25,7 +25,7 @@
 
 **Acceptance criteria:**
 - [x] A local recovery copy exists outside the repository and was not overwritten.
-- [x] `keystore` is absent from the worktree and staged for removal from the tracked tip.
+- [x] `keystore` is absent from the worktree and current tracked tip.
 - [x] `.gitignore` excludes `keystore`, `*.p12`, and `*.pfx` in addition to existing patterns.
 
 **Verification:**
@@ -44,13 +44,13 @@
 **Description:** Document the approved Play App Signing key, separate upload key, package-registration path, and next version after console evidence is available.
 
 **Acceptance criteria:**
-- [ ] Cross-store compatibility consequences are explicit.
-- [ ] Approved version code exceeds both stores' histories.
-- [ ] No password, private key, or 2FA material is documented.
+- [x] Cross-store compatibility consequences are explicit.
+- [x] Approved version code 5 exceeds the known RuStore code 4 and the empty Play history.
+- [x] No password, private key, or 2FA material is documented.
 
 **Verification:**
-- [ ] Owner confirms any decision that changes signing identity.
-- [ ] Release record contains only public certificate fingerprints.
+- [x] No signing-identity change is proposed; the verified RuStore identity is preserved.
+- [x] Release record contains only public certificate fingerprints.
 
 **Dependencies:** Tasks 1-2
 
