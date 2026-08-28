@@ -262,7 +262,7 @@
 
 **Verification:**
 - [x] Review `git log --graph`, `git diff`, and branch-specific builds.
-- [ ] Push without force; stop if remote movement prevents fast-forward.
+- [x] Push without force; stop if remote movement prevents fast-forward.
 
 **Dependencies:** Task 13 and Android source checkpoint
 
