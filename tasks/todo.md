@@ -237,13 +237,13 @@
 **Description:** Replace installer inference with the approved release-branch store value while hiding the irrelevant developer-store menu entry and preserving web fallbacks.
 
 **Acceptance criteria:**
-- [ ] Google Play builds use only Play rating/developer/companion links.
-- [ ] RuStore builds use only RuStore equivalents.
-- [ ] Branch-specific source difference is confined to the store build value.
+- [x] Google Play builds use only Play rating/developer/companion links.
+- [x] RuStore builds use only RuStore equivalents.
+- [x] Branch-specific source difference is confined to the store build value.
 
 **Verification:**
-- [ ] Add pure/source regression coverage for both values.
-- [ ] Build and manually exercise both store variants.
+- [x] Add pure/source regression coverage for both values.
+- [x] Build and manually exercise both store variants.
 
 **Dependencies:** Task 8
 

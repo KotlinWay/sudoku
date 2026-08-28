@@ -78,6 +78,9 @@ public class SettingsActivity extends ThemedActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.settings, menu);
+        boolean googlePlay = Links.isGooglePlay();
+        menu.findItem(R.id.menu_play).setVisible(googlePlay);
+        menu.findItem(R.id.menu_rustore).setVisible(!googlePlay);
         return true;
     }
 
@@ -88,10 +91,8 @@ public class SettingsActivity extends ThemedActivity
             store.dispatch(new SettingsAction.LinkClicked(Links.TELEGRAM));
         } else if (id == R.id.menu_max) {
             store.dispatch(new SettingsAction.LinkClicked(Links.MAX));
-        } else if (id == R.id.menu_play) {
-            store.dispatch(new SettingsAction.LinkClicked(Links.PLAY_DEVELOPER));
-        } else if (id == R.id.menu_rustore) {
-            store.dispatch(new SettingsAction.LinkClicked(Links.RUSTORE_DEVELOPER));
+        } else if (id == R.id.menu_play || id == R.id.menu_rustore) {
+            store.dispatch(new SettingsAction.LinkClicked(Links.developerUrl()));
         } else if (id == R.id.menu_site) {
             store.dispatch(new SettingsAction.LinkClicked(Links.SITE));
         } else if (id == R.id.menu_rate) {

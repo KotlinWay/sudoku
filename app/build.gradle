@@ -25,6 +25,7 @@ android {
         targetSdk 36
         versionCode 5
         versionName "1.4"
+        buildConfigField 'String', 'STORE', '"GOOGLE_PLAY"'
     }
 
     signingConfigs {
