@@ -199,13 +199,13 @@
 **Description:** Reuse the existing 512 icon and create one compliant, text-light 1024x500 feature graphic consistent with the app's gold/charcoal visual language.
 
 **Acceptance criteria:**
-- [ ] Icon is opaque 512x512 PNG and under 1 MB.
-- [ ] Feature graphic is opaque 1024x500 PNG/JPEG.
-- [ ] No store badge, ranking, price, testimonial, or download call-to-action appears.
+- [x] Icon is opaque 512x512 PNG and under 1 MB.
+- [x] Feature graphic is opaque 1024x500 PNG/JPEG.
+- [x] No store badge, ranking, price, testimonial, or download call-to-action appears.
 
 **Verification:**
-- [ ] Inspect dimensions, alpha, file sizes, and visual crop safety.
-- [ ] Compare against current official Play asset requirements.
+- [x] Inspect dimensions, alpha, file sizes, and visual crop safety.
+- [x] Compare against current official Play asset requirements.
 
 **Dependencies:** Task 9
 
