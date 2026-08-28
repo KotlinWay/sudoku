@@ -161,13 +161,13 @@
 **Description:** Install only to explicitly named emulators and verify critical flows on API 33 and API 36 or the closest available Play pre-launch equivalent.
 
 **Acceptance criteria:**
-- [ ] Cold start, both game modes, pause/back, rotation, save/restore, and theme changes work.
-- [ ] Settings links open the expected store for the tested build.
-- [ ] TalkBack semantics remain usable.
+- [x] Cold start, both game modes, pause/back, rotation, save/restore, and theme changes work.
+- [x] Settings links open the expected store for the tested build.
+- [x] TalkBack semantics remain usable.
 
 **Verification:**
-- [ ] Use `adb -s emulator-5554` only after that emulator exists.
-- [ ] Record device/API and smoke results in release notes.
+- [x] Use `adb -s emulator-5554` only after that emulator exists.
+- [x] Record device/API and smoke results in release notes.
 
 **Dependencies:** Task 8
 
