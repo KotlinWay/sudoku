@@ -63,14 +63,14 @@
 **Description:** Route the application theme through a qualified platform parent so API 23-28 never resolve the API-29-only DayNight style while existing app colors and theme selection remain intact.
 
 **Acceptance criteria:**
-- [ ] Base resources reference only styles available at API 23.
-- [ ] API 29+ uses `Theme.DeviceDefault.DayNight` through a qualified resource.
-- [ ] Existing light/dark/system resources remain single-source where practical.
+- [x] Base resources reference only styles available at API 23.
+- [x] API 29+ uses `Theme.DeviceDefault.DayNight` through a qualified resource.
+- [x] Existing light/dark/system resources remain single-source where practical.
 
 **Verification:**
-- [ ] Add a resource regression test for qualified parents.
-- [ ] `lintRelease` no longer reports `NewApi` for `AppTheme`.
-- [ ] Smoke-test all three theme choices.
+- [x] Add a resource regression test for qualified parents.
+- [x] `lintRelease` no longer reports `NewApi` for `AppTheme`.
+- [x] Smoke-test all three theme choices on the API 33 emulator.
 
 **Dependencies:** Task 3
 

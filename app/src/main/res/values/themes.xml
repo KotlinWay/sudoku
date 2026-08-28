@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+    <!-- API 23-28 do not expose Theme.DeviceDefault.DayNight. -->
+    <style name="PlatformTheme" parent="@android:style/Theme.DeviceDefault" />
+
+    <style name="AppTheme" parent="@style/PlatformTheme">
         <item name="android:colorBackground">@color/background</item>
         <item name="android:colorPrimary">@color/accent</item>
         <!--
