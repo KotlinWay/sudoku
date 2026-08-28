@@ -142,13 +142,13 @@
 **Description:** Commit the owner-approved version name/code and human-readable release notes from the already-live 1.3 baseline.
 
 **Acceptance criteria:**
-- [ ] Version code exceeds both store histories.
-- [ ] Version name is `1.4` unless console evidence required a revised approved value.
-- [ ] Release notes describe user-visible impact, not internal mechanics.
+- [x] Version code exceeds both store histories.
+- [x] Version name is `1.4` unless console evidence required a revised approved value.
+- [x] Release notes describe user-visible impact, not internal mechanics.
 
 **Verification:**
-- [ ] Inspect packaged manifest metadata with Android build tools.
-- [ ] Unit/build/lint checkpoint is fully green.
+- [x] Inspect packaged manifest metadata with Android build tools.
+- [x] Unit/build/lint checkpoint is fully green.
 
 **Dependencies:** Tasks 3, 7
 
