@@ -218,13 +218,13 @@
 **Description:** Produce paste-ready English/Russian metadata, release notes, asset alt text, and truthful answers for every expected App content declaration.
 
 **Acceptance criteria:**
-- [ ] Text meets 30/80/4000-character limits in both locales.
-- [ ] Data safety states no collection/sharing and matches app behavior/privacy policy.
-- [ ] Ads, access, audience, IARC, financial, health, government, news, and monetization answers are covered.
+- [x] Text meets 30/80/4000-character limits in both locales.
+- [x] Data safety states no collection/sharing and matches app behavior/privacy policy.
+- [x] Ads, access, audience, IARC, financial, health, government, news, and monetization answers are covered.
 
 **Verification:**
-- [ ] Run a small character-count check.
-- [ ] Cross-check every claim against manifest, dependencies, and live privacy page.
+- [x] Run a small character-count check.
+- [x] Cross-check every claim against manifest, dependencies, and live privacy page.
 
 **Dependencies:** Tasks 8, 10-11
 
