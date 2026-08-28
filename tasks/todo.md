@@ -256,12 +256,12 @@
 **Description:** Create/update `google_play` and fast-forward the stale `rustore` branch from the same verified common commit, then apply only the store-value delta.
 
 **Acceptance criteria:**
-- [ ] Both branches contain all 1.4 fixes and tests.
-- [ ] Branch comparison shows only approved store values/metadata.
-- [ ] Both branches build from clean worktrees.
+- [x] Both branches contain all 1.4 fixes and tests.
+- [x] Branch comparison shows only approved store values/metadata.
+- [x] Both branches build from clean worktrees.
 
 **Verification:**
-- [ ] Review `git log --graph`, `git diff`, and branch-specific builds.
+- [x] Review `git log --graph`, `git diff`, and branch-specific builds.
 - [ ] Push without force; stop if remote movement prevents fast-forward.
 
 **Dependencies:** Task 13 and Android source checkpoint
