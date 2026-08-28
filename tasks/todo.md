@@ -103,14 +103,14 @@
 **Description:** Make manifest and XML rules match the published claim that game state and statistics never leave the device through Android backup/transfer.
 
 **Acceptance criteria:**
-- [ ] Legacy Auto Backup excludes all app-owned domains.
-- [ ] Android 12+ cloud backup and device transfer exclude all app-owned domains.
-- [ ] The manifest references both rule sets and retains `allowBackup=false`.
+- [x] Legacy Auto Backup excludes all app-owned domains.
+- [x] Android 12+ cloud backup and device transfer exclude all app-owned domains.
+- [x] The manifest references both rule sets and retains `allowBackup=false`.
 
 **Verification:**
-- [ ] Add a resource test that parses the manifest and both XML files.
-- [ ] `lintRelease` no longer reports missing `dataExtractionRules`.
-- [ ] Inspect the merged release manifest.
+- [x] Add a resource test that parses the manifest and both XML files.
+- [x] `lintRelease` no longer reports missing `dataExtractionRules`.
+- [x] Inspect the merged release manifest.
 
 **Dependencies:** Task 5
 
