@@ -1,5 +1,6 @@
 package info.javaway.sudoku.ui.game;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -699,6 +700,7 @@ public class GameActivity extends ThemedActivity
     }
 
     /** До Android 13 система зовёт этот метод, а не колбэк выше. */
+    @SuppressLint("GestureBackNavigation")
     @Override
     public void onBackPressed() {
         if (!handleBack()) super.onBackPressed();

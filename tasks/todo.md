@@ -83,14 +83,14 @@
 **Description:** Preserve the platform callback for API 33+ and legacy fallback for API 23-32, then narrowly suppress the detector path it cannot model.
 
 **Acceptance criteria:**
-- [ ] Open pause/win panels consume Back and return to the board.
-- [ ] With no panel open, system Back exits normally and predictive animation remains available.
-- [ ] No AndroidX dependency is introduced.
+- [x] Open pause/win panels consume Back and return to the board.
+- [x] With no panel open, system Back exits normally and predictive animation remains available.
+- [x] No AndroidX dependency is introduced.
 
 **Verification:**
-- [ ] Add a source/resource regression test proving callback registration and guarded legacy fallback.
-- [ ] `lintRelease` has no `GestureBackNavigation` error.
-- [ ] Smoke-test panel Back and app-exit Back on API 33/36.
+- [x] Add a source/resource regression test proving callback registration and guarded legacy fallback.
+- [x] `lintRelease` has no `GestureBackNavigation` error.
+- [x] Smoke-test panel Back and app-exit Back on API 33 and API 36.
 
 **Dependencies:** Task 4
 
