@@ -313,13 +313,13 @@
 **Description:** Create a fresh private upload key, configure local ignored signing properties, produce the approved Play AAB and RuStore APK, and verify certificates/checksums.
 
 **Acceptance criteria:**
-- [ ] AAB is signed by the approved upload key.
-- [ ] APK is signed by the approved RuStore/app-signing key.
-- [ ] Private files remain outside Git and chat.
+- [x] AAB is signed by the approved upload key.
+- [x] APK is signed by the approved RuStore/app-signing key.
+- [x] Private files remain outside Git and chat.
 
 **Verification:**
-- [ ] `jarsigner` verifies AAB; `apksigner` verifies APK.
-- [ ] SHA-256 checksums and public certificate fingerprints are recorded.
+- [x] `jarsigner` verifies AAB; `apksigner` verifies APK.
+- [x] SHA-256 checksums and public certificate fingerprints are recorded.
 
 **Dependencies:** Tasks 3, 8, 14
 
