@@ -8,10 +8,10 @@
 - [x] RuStore signing SHA-256 is recorded without private material.
 - [x] Highest published RuStore version code/name are read from the installed
   store artifact (`4` / `1.3`); console confirmation remains part of Task 18.
-- [ ] The tracked PKCS#12 certificate is confirmed as matching or not matching RuStore.
+- [x] The tracked PKCS#12 certificate is confirmed as matching RuStore.
 
 **Verification:**
-- [ ] Compare certificate fingerprints character-for-character.
+- [x] Compare certificate fingerprints character-for-character.
 - [x] Save only public fingerprints and store facts in release notes.
 
 **Dependencies:** None
@@ -24,14 +24,14 @@
 **Description:** Preserve one local recovery copy outside Git, then remove `keystore` from the tracked branch tip and ignore the exact extensionless filename as well as standard key extensions.
 
 **Acceptance criteria:**
-- [ ] A local recovery copy exists outside the repository and is not overwritten.
-- [ ] `keystore` is absent from the worktree and tracked tip.
-- [ ] `.gitignore` excludes `keystore`, `*.p12`, and `*.pfx` in addition to existing patterns.
+- [x] A local recovery copy exists outside the repository and was not overwritten.
+- [x] `keystore` is absent from the worktree and staged for removal from the tracked tip.
+- [x] `.gitignore` excludes `keystore`, `*.p12`, and `*.pfx` in addition to existing patterns.
 
 **Verification:**
-- [ ] `git status --short` shows only the intended deletion/ignore change.
-- [ ] `git check-ignore -v keystore` identifies the new rule.
-- [ ] No new secret appears in the staged diff.
+- [x] `git status --short` shows only the intended deletion/ignore/documentation change.
+- [x] `git check-ignore -v --no-index keystore` identifies the new rule.
+- [x] No new secret appears in the staged diff.
 
 **Dependencies:** Task 1
 

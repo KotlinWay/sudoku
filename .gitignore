@@ -18,8 +18,11 @@ local.properties
 # потеря ключа означает, что приложение больше нельзя обновить, а утечка —
 # что обновление может выпустить кто угодно.
 keystore.properties
+keystore
 *.jks
 *.keystore
+*.p12
+*.pfx
 
 # IDE
 .idea/
