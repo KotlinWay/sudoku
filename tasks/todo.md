@@ -180,13 +180,13 @@
 **Description:** Capture four actual 9:16 phone screens at 1080x1920 or higher from the verified build: levels, light gameplay, dark candidates, and solved/relaxed state.
 
 **Acceptance criteria:**
-- [ ] Four PNG/JPEG files show current UI without notifications or personal data.
-- [ ] Each file is at least 1080x1920 and no dimension exceeds twice the other.
-- [ ] Screens accurately represent release 1.4.
+- [x] Four PNG/JPEG files show current UI without notifications or personal data.
+- [x] Each file is at least 1080x1920 and no dimension exceeds twice the other.
+- [x] Screens accurately represent release 1.4.
 
 **Verification:**
-- [ ] Inspect dimensions/pixel format with `ffprobe`.
-- [ ] Visually inspect all four images.
+- [x] Inspect dimensions/pixel format with `ffprobe`.
+- [x] Visually inspect all four images.
 
 **Dependencies:** Task 9
 
